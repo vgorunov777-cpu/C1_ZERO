@@ -1,4 +1,4 @@
-# 1C Skills for Claude Code
+# C1_ZERO
 
 > **Work in progress** — навыки находятся в стадии тестирования, отладки и оптимизации.
 
