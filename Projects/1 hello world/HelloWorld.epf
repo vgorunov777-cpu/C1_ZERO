@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdcore:Catalog mdcore:name="Catalog.Catalog" mdcore:uuid="7a3b5c9d-1e2f-4a5b-8c9d-0e1f2a3b4c5d" xmlns:mdcore="uuid:8742763e-7d1a-4b5c-9e8f-1a2b3c4d5e6f">
+  <InternalInfo/>
+  <Properties>
+    <Name>HelloWorld</Name>
+    <Comment>Пример обработки "Hello World"</Comment>
+    <ObjectBelonging>Active</ObjectBelonging>
+    <ExtendedConfigurationObjectBelonging>Undefined</ExtendedConfigurationObjectBelonging>
+  </Properties>
+</mdcore:Catalog>
