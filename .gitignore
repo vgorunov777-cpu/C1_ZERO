@@ -44,7 +44,6 @@ __pycache__/
 .augment/
 .cline/
 .codex/
-.cursor/
 .gemini/
 .github/skills/
 .kilocode/
@@ -52,3 +51,6 @@ __pycache__/
 .opencode/
 .roo/
 .windsurf/
+
+# Cursor: содержимое отслеживается, но mcp.json с токенами — игнорируется
+.cursor/mcp.json
