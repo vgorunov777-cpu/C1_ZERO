@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<DataCompositionSchema xmlns="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcscom="http://v8.1c.ru/8.1/data-composition-system/common" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<dataSource>
+		<name>ИсточникДанных1</name>
+		<dataSourceType>Local</dataSourceType>
+	</dataSource>
+	<dataSet xsi:type="DataSetQuery">
+		<name>НаборДанных1</name>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Номенклатура</dataPath>
+			<field>Номенклатура</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>НормативноеКоличествоЗапаса</dataPath>
+			<field>НормативноеКоличествоЗапаса</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Склад</dataPath>
+			<field>Склад</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>СтатусАктивности</dataPath>
+			<field>СтатусАктивности</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Характеристика</dataPath>
+			<field>Характеристика</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ДокументПоступления</dataPath>
+			<field>ДокументПоступления</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВНаличии</dataPath>
+			<field>ВНаличии</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВРезерве</dataPath>
+			<field>ВРезерве</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>КПоступлению</dataPath>
+			<field>КПоступлению</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Упаковка</dataPath>
+			<field>Упаковка</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Штрихкод</dataPath>
+			<field>Штрихкод</field>
+		</field>
+		<dataSource>ИсточникДанных1</dataSource>
+		<query>ВЫБРАТЬ
+	спрНоменклатура.Ссылка КАК Номенклатура,
+	ВЫРАЗИТЬ(&amp;Склад КАК Справочник.Склады) КАК Склад
+ПОМЕСТИТЬ сНоменклатура
+ИЗ
+	Справочник.Номенклатура КАК спрНоменклатура
+ГДЕ
+	спрНоменклатура.Ссылка В(&amp;СписокНоменклатуры)
+;
+
+////////////////////////////////////////////////////////////////////////////////
+ВЫБРАТЬ
+	сНоменклатура.Номенклатура,
+	СвободныеОстаткиОстатки.ВНаличииОстаток КАК ВНаличии,
+	СвободныеОстаткиОстатки.ВРезервеОстаток КАК ВРезерве,
+	ЕСТЬNULL(ВЫРАЗИТЬ(ДополнительныеСведения.Значение КАК ЧИСЛО(1, 0)), "&lt;&gt;") КАК СтатусАктивности,
+	ТоварныеОграничения.НормативноеКоличествоЗапаса,
+	ТоварыКПоступлениюОстатки.КПоступлениюОстаток КАК КПоступлению
+ПОМЕСТИТЬ ВТ_Данные
+ИЗ
+	сНоменклатура КАК сНоменклатура
+		ЛЕВОЕ СОЕДИНЕНИЕ РегистрНакопления.СвободныеОстатки.Остатки(
+				&amp;ТекущаяДата {(&amp;ТекущаяДата)},
+				(Номенклатура, Склад) В
+					(ВЫБРАТЬ
+						сНоменклатура.Номенклатура,
+						сНоменклатура.Склад
+					ИЗ
+						сНоменклатура КАК сНоменклатура)) КАК СвободныеОстаткиОстатки
+		ПО сНоменклатура.Номенклатура = СвободныеОстаткиОстатки.Номенклатура
+		ЛЕВОЕ СОЕДИНЕНИЕ РегистрСведений.ДополнительныеСведения КАК ДополнительныеСведения
+		ПО сНоменклатура.Номенклатура = ДополнительныеСведения.Объект
+			И (ДополнительныеСведения.Свойство = &amp;СвойствоСтатусАктивности)
+		ЛЕВОЕ СОЕДИНЕНИЕ РегистрСведений.ТоварныеОграничения КАК ТоварныеОграничения
+		ПО сНоменклатура.Номенклатура = ТоварныеОграничения.Номенклатура
+			И сНоменклатура.Склад = ТоварныеОграничения.Склад
+		ЛЕВОЕ СОЕДИНЕНИЕ РегистрНакопления.ТоварыКПоступлению.Остатки(
+				&amp;ТекущаяДата {(&amp;ТекущаяДата)},
+				(Номенклатура, Склад) В
+					(ВЫБРАТЬ
+						сНоменклатура.Номенклатура,
+						сНоменклатура.Склад
+					ИЗ
+						сНоменклатура КАК сНоменклатура)) КАК ТоварыКПоступлениюОстатки
+		ПО сНоменклатура.Номенклатура = ТоварыКПоступлениюОстатки.Номенклатура
+;
+
+////////////////////////////////////////////////////////////////////////////////
+ВЫБРАТЬ
+	ВТ_Данные.Номенклатура,
+	ВТ_Данные.ВНаличии,
+	ВТ_Данные.ВРезерве,
+	ВТ_Данные.СтатусАктивности,
+	ВТ_Данные.НормативноеКоличествоЗапаса,
+	ВТ_Данные.КПоступлению,
+	ШтрихкодыНоменклатуры.Штрихкод,
+	ВЫБОР
+		КОГДА ШтрихкодыНоменклатуры.Упаковка = ЗНАЧЕНИЕ(Справочник.УпаковкиНоменклатуры.ПустаяСсылка)
+			ТОГДА ""
+		ИНАЧЕ ШтрихкодыНоменклатуры.Упаковка.Наименование
+	КОНЕЦ КАК Упаковка
+ИЗ
+	ВТ_Данные КАК ВТ_Данные
+		ВНУТРЕННЕЕ СОЕДИНЕНИЕ РегистрСведений.ШтрихкодыНоменклатуры КАК ШтрихкодыНоменклатуры
+		ПО ВТ_Данные.Номенклатура = ШтрихкодыНоменклатуры.Номенклатура</query>
+	</dataSet>
+	<calculatedField>
+		<dataPath>ШтрихкодСУпаковкой</dataPath>
+		<expression>ВЫБОР КОГДА Упаковка = "" ТОГДА Штрихкод ИНАЧЕ Штрихкод + "("+Упаковка+")" КОНЕЦ</expression>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Штрихкод с упаковкой</v8:content>
+			</v8:item>
+		</title>
+	</calculatedField>
+	<totalField>
+		<dataPath>ШтрихкодСУпаковкой</dataPath>
+		<expression>СоединитьСтроки(ШтрихкодСУпаковкой, ", ")</expression>
+		<group>Номенклатура</group>
+	</totalField>
+	<parameter>
+		<name>Склад</name>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Склад</v8:content>
+			</v8:item>
+		</title>
+		<value xsi:nil="true"/>
+		<useRestriction>false</useRestriction>
+	</parameter>
+	<parameter>
+		<name>СписокНоменклатуры</name>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Список номенклатуры</v8:content>
+			</v8:item>
+		</title>
+		<useRestriction>false</useRestriction>
+		<valueListAllowed>true</valueListAllowed>
+	</parameter>
+	<parameter>
+		<name>ТекущаяДата</name>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Текущая дата</v8:content>
+			</v8:item>
+		</title>
+		<valueType>
+			<v8:Type>xs:dateTime</v8:Type>
+			<v8:DateQualifiers>
+				<v8:DateFractions>DateTime</v8:DateFractions>
+			</v8:DateQualifiers>
+		</valueType>
+		<value xsi:type="xs:dateTime">0001-01-01T00:00:00</value>
+		<useRestriction>true</useRestriction>
+		<expression>ТекущаяДата()</expression>
+	</parameter>
+	<parameter>
+		<name>СвойствоСтатусАктивности</name>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Свойство статус активности</v8:content>
+			</v8:item>
+		</title>
+		<value xsi:nil="true"/>
+		<useRestriction>false</useRestriction>
+	</parameter>
+	<settingsVariant>
+		<dcsset:name>Основной</dcsset:name>
+		<dcsset:presentation xsi:type="xs:string">Основной</dcsset:presentation>
+		<dcsset:settings xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows">
+			<dcsset:selection>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Номенклатура</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>СтатусАктивности</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>НормативноеКоличествоЗапаса</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ВНаличии</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ВРезерве</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>КПоступлению</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ШтрихкодСУпаковкой</dcsset:field>
+				</dcsset:item>
+			</dcsset:selection>
+			<dcsset:dataParameters>
+				<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+					<dcscor:use>false</dcscor:use>
+					<dcscor:parameter>Склад</dcscor:parameter>
+					<dcscor:value xsi:nil="true"/>
+					<dcsset:userSettingID>fa24699e-41df-4666-ba33-6da4715dcefa</dcsset:userSettingID>
+				</dcscor:item>
+				<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+					<dcscor:use>false</dcscor:use>
+					<dcscor:parameter>СписокНоменклатуры</dcscor:parameter>
+					<dcscor:value xsi:nil="true"/>
+					<dcsset:userSettingID>7e2efe76-8275-49ff-b127-0a5edf6d7432</dcsset:userSettingID>
+				</dcscor:item>
+				<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+					<dcscor:use>false</dcscor:use>
+					<dcscor:parameter>СвойствоСтатусАктивности</dcscor:parameter>
+					<dcscor:value xsi:nil="true"/>
+				</dcscor:item>
+			</dcsset:dataParameters>
+			<dcsset:item xsi:type="dcsset:StructureItemGroup">
+				<dcsset:groupItems>
+					<dcsset:item xsi:type="dcsset:GroupItemField">
+						<dcsset:field>Номенклатура</dcsset:field>
+						<dcsset:groupType>Items</dcsset:groupType>
+						<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+						<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+						<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:GroupItemField">
+						<dcsset:field>СтатусАктивности</dcsset:field>
+						<dcsset:groupType>Items</dcsset:groupType>
+						<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+						<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+						<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:GroupItemField">
+						<dcsset:field>НормативноеКоличествоЗапаса</dcsset:field>
+						<dcsset:groupType>Items</dcsset:groupType>
+						<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+						<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+						<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:GroupItemField">
+						<dcsset:field>ВНаличии</dcsset:field>
+						<dcsset:groupType>Items</dcsset:groupType>
+						<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+						<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+						<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:GroupItemField">
+						<dcsset:field>ВРезерве</dcsset:field>
+						<dcsset:groupType>Items</dcsset:groupType>
+						<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+						<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+						<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:GroupItemField">
+						<dcsset:field>КПоступлению</dcsset:field>
+						<dcsset:groupType>Items</dcsset:groupType>
+						<dcsset:periodAdditionType>None</dcsset:periodAdditionType>
+						<dcsset:periodAdditionBegin xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionBegin>
+						<dcsset:periodAdditionEnd xsi:type="xs:dateTime">0001-01-01T00:00:00</dcsset:periodAdditionEnd>
+					</dcsset:item>
+				</dcsset:groupItems>
+				<dcsset:order>
+					<dcsset:item xsi:type="dcsset:OrderItemAuto"/>
+				</dcsset:order>
+				<dcsset:selection>
+					<dcsset:item xsi:type="dcsset:SelectedItemAuto"/>
+				</dcsset:selection>
+			</dcsset:item>
+		</dcsset:settings>
+	</settingsVariant>
+</DataCompositionSchema>

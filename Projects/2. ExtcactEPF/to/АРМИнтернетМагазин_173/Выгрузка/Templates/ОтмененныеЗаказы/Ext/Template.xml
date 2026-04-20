@@ -1,0 +1,567 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<DataCompositionSchema xmlns="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcscom="http://v8.1c.ru/8.1/data-composition-system/common" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<dataSource>
+		<name>ИсточникДанных1</name>
+		<dataSourceType>Local</dataSourceType>
+	</dataSource>
+	<dataSet xsi:type="DataSetQuery">
+		<name>НаборДанных1</name>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>АдресДоставки</dataPath>
+			<field>АдресДоставки</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВремяДоставкиПо</dataPath>
+			<field>ВремяДоставкиПо</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВремяДоставкиС</dataPath>
+			<field>ВремяДоставкиС</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ДатаЗаказаНаСайте</dataPath>
+			<field>ДатаЗаказаНаСайте</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ДатаПоследнегоИзменения</dataPath>
+			<field>ДатаПоследнегоИзменения</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ЖелаемаяДатаОтгрузки</dataPath>
+			<field>ЖелаемаяДатаОтгрузки</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Заказ</dataPath>
+			<field>Заказ</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>КоличествоСтрок</dataPath>
+			<field>КоличествоСтрок</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Комментарий</dataPath>
+			<field>Комментарий</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Комплектовщик</dataPath>
+			<field>Комплектовщик</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>НомерЗаказаНаСайте</dataPath>
+			<field>НомерЗаказаНаСайте</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ОтменаКурьером</dataPath>
+			<field>ОтменаКурьером</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ОтменаМагазином</dataPath>
+			<field>ОтменаМагазином</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ОтменаСайтом</dataPath>
+			<field>ОтменаСайтом</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ОтменаТехподдержкой</dataPath>
+			<field>ОтменаТехподдержкой</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ПокупательEmail</dataPath>
+			<field>ПокупательEmail</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ПокупательТелефон</dataPath>
+			<field>ПокупательТелефон</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ПокупательФИО</dataPath>
+			<field>ПокупательФИО</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ПользовательОтмены</dataPath>
+			<field>ПользовательОтмены</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Склад</dataPath>
+			<field>Склад</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Статус</dataPath>
+			<field>Статус</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>СуммаДокумента</dataPath>
+			<field>СуммаДокумента</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ТрекНомер</dataPath>
+			<field>ТрекНомер</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВремяДоставкиПоМинута</dataPath>
+			<field>ВремяДоставкиПоМинута</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВремяДоставкиПоЧас</dataPath>
+			<field>ВремяДоставкиПоЧас</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВремяДоставкиСМинута</dataPath>
+			<field>ВремяДоставкиСМинута</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ВремяДоставкиСЧас</dataPath>
+			<field>ВремяДоставкиСЧас</field>
+		</field>
+		<dataSource>ИсточникДанных1</dataSource>
+		<query>ВЫБРАТЬ
+	ЗаказКлиента.Ссылка КАК Заказ,
+	ЗаказКлиента.Склад КАК Склад,
+	ЗаказКлиента.ДатаЗаказаНаСайте КАК ДатаЗаказаНаСайте,
+	ЗаказКлиента.НомерЗаказаНаСайте КАК НомерЗаказаНаСайте,
+	ВЫБОР
+		КОГДА ЗаказКлиента.ПредыдущийСтатус = ""
+			ТОГДА "Отменен"
+		ИНАЧЕ ЗаказКлиента.ПредыдущийСтатус
+	КОНЕЦ КАК Статус,
+	ЗаказКлиента.СуммаДокумента,
+	ЗаказКлиента.ЖелаемаяДатаОтгрузки,
+	ЗаказКлиента.ПокупательТелефон,
+	ЗаказКлиента.ПокупательEmail,
+	ЗаказКлиента.Комплектовщик,
+	ЗаказКлиента.ПокупательФИО,
+	ЗаказКлиента.ВремяДоставкиПо,
+	ЗаказКлиента.ВремяДоставкиС,
+	ЗаказКлиента.АдресДоставки,
+	ЗаказКлиента.Комментарий,
+	ЗаказКлиента.ТрекНомер,
+	ЗаказКлиента.ПользовательОтмены,
+	ВЫБОР
+		КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "USER1CWEB"
+			ТОГДА ИСТИНА
+		ИНАЧЕ ЛОЖЬ
+	КОНЕЦ КАК ОтменаМагазином,
+	ВЫБОР
+		КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменСайт"
+			ТОГДА ИСТИНА
+		ИНАЧЕ ЛОЖЬ
+	КОНЕЦ КАК ОтменаСайтом,
+	ВЫБОР
+		КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменPayMob"
+			ТОГДА ИСТИНА
+		ИНАЧЕ ЛОЖЬ
+	КОНЕЦ КАК ОтменаКурьером,
+	ВЫБОР
+		КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "USER1CWEB"
+			ТОГДА ЛОЖЬ
+		КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменСайт"
+			ТОГДА ЛОЖЬ
+		КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменPayMob"
+			ТОГДА ЛОЖЬ
+		ИНАЧЕ ИСТИНА
+	КОНЕЦ КАК ОтменаТехподдержкой,
+	зкСтроки.КоличествоСтрок,
+	ЕСТЬNULL(ПоследниеИзменения.ДатаВерсии, ДАТАВРЕМЯ(1, 1, 1, 0, 0, 0)) КАК ДатаПоследнегоИзменения,
+	ЧАС(ЗаказКлиента.ВремяДоставкиС) КАК ВремяДоставкиСЧас,
+	МИНУТА(ЗаказКлиента.ВремяДоставкиС) КАК ВремяДоставкиСМинута,
+	ЧАС(ЗаказКлиента.ВремяДоставкиПо) КАК ВремяДоставкиПоЧас,
+	МИНУТА(ЗаказКлиента.ВремяДоставкиПо) КАК ВремяДоставкиПоМинута
+ИЗ
+	Документ.ЗаказКлиента КАК ЗаказКлиента
+		ЛЕВОЕ СОЕДИНЕНИЕ (ВЫБРАТЬ
+			ЗаказКлиентаТовары.Ссылка КАК Ссылка,
+			КОЛИЧЕСТВО(РАЗЛИЧНЫЕ ЗаказКлиентаТовары.НомерСтроки) КАК КоличествоСтрок
+		ИЗ
+			Документ.ЗаказКлиента.Товары КАК ЗаказКлиентаТовары
+		ГДЕ
+			ЗаказКлиентаТовары.ПричинаОтмены.Наименование = "Отказ"
+		
+		СГРУППИРОВАТЬ ПО
+			ЗаказКлиентаТовары.Ссылка) КАК зкСтроки
+		ПО ЗаказКлиента.Ссылка = зкСтроки.Ссылка
+		ЛЕВОЕ СОЕДИНЕНИЕ (ВЫБРАТЬ
+			ВерсииОбъектов.Объект КАК Заказ,
+			МАКСИМУМ(ВерсииОбъектов.ДатаВерсии) КАК ДатаВерсии
+		ИЗ
+			РегистрСведений.ВерсииОбъектов КАК ВерсииОбъектов
+		
+		СГРУППИРОВАТЬ ПО
+			ВерсииОбъектов.Объект) КАК ПоследниеИзменения
+		ПО ЗаказКлиента.Ссылка = ПоследниеИзменения.Заказ
+ГДЕ
+	ЗаказКлиента.ИнтернетМагазин
+	И НЕ ЗаказКлиента.НомерЗаказаНаСайте = ""
+	И ЗаказКлиента.СуммаДокумента = 0
+	И ЗаказКлиента.ЖелаемаяДатаОтгрузки МЕЖДУ &amp;ЖелаемаяДатаОтгрузкиНачало И &amp;ЖелаемаяДатаОтгрузкиОкончание
+{ГДЕ
+	ЗаказКлиента.Склад.*,
+	ЗаказКлиента.Ссылка.* КАК Заказ,
+	ЗаказКлиента.НомерЗаказаНаСайте,
+	ЗаказКлиента.ДатаЗаказаНаСайте,
+	ЗаказКлиента.ПользовательОтмены.*,
+	(ВЫБОР
+			КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "USER1CWEB"
+				ТОГДА ИСТИНА
+			ИНАЧЕ ЛОЖЬ
+		КОНЕЦ) КАК ОтменаМагазином,
+	(ВЫБОР
+			КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменСайт"
+				ТОГДА ИСТИНА
+			ИНАЧЕ ЛОЖЬ
+		КОНЕЦ) КАК ОтменаСайтом,
+	(ВЫБОР
+			КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменPayMob"
+				ТОГДА ИСТИНА
+			ИНАЧЕ ЛОЖЬ
+		КОНЕЦ) КАК ОтменаКурьером,
+	(ВЫБОР
+			КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "USER1CWEB"
+				ТОГДА ЛОЖЬ
+			КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменСайт"
+				ТОГДА ЛОЖЬ
+			КОГДА ЗаказКлиента.ПользовательОтмены.Наименование = "ОбменPayMob"
+				ТОГДА ЛОЖЬ
+			ИНАЧЕ ИСТИНА
+		КОНЕЦ) КАК ОтменаТехподдержкой}</query>
+	</dataSet>
+	<calculatedField>
+		<dataPath>ПериодДоставки</dataPath>
+		<expression>Формат(ВремяДоставкиСЧас, "ЧЦ=2; ЧВН=; ЧН=00") + ":" + Формат(ВремяДоставкиСМинута, "ЧЦ=2; ЧВН=; ЧН=00") + " - " + Формат(ВремяДоставкиПоЧас, "ЧЦ=2; ЧВН=; ЧН=00") + ":" + Формат(ВремяДоставкиПоМинута, "ЧЦ=2; ЧВН=; ЧН=00")</expression>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Период доставки</v8:content>
+			</v8:item>
+		</title>
+	</calculatedField>
+	<calculatedField>
+		<dataPath>ИнициаторОтмены</dataPath>
+		<expression>ВЫБОР КОГДА ОтменаСайтом ТОГДА "Отмена сайтом" КОГДА ОтменаКурьером ТОГДА "Отмена курьером" КОГДА ОтменаМагазином ТОГДА "Отмена магазином" ИНАЧЕ "Отмена техподдержки" КОНЕЦ</expression>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Отмена</v8:content>
+			</v8:item>
+		</title>
+	</calculatedField>
+	<parameter>
+		<name>ЖелаемаяДатаОтгрузкиНачало</name>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Желаемая дата отгрузки начало</v8:content>
+			</v8:item>
+		</title>
+		<valueType>
+			<v8:Type>xs:dateTime</v8:Type>
+			<v8:DateQualifiers>
+				<v8:DateFractions>Date</v8:DateFractions>
+			</v8:DateQualifiers>
+		</valueType>
+		<value xsi:type="xs:dateTime">0001-01-01T00:00:00</value>
+		<useRestriction>false</useRestriction>
+	</parameter>
+	<parameter>
+		<name>ЖелаемаяДатаОтгрузкиОкончание</name>
+		<title xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>Желаемая дата отгрузки окончание</v8:content>
+			</v8:item>
+		</title>
+		<valueType>
+			<v8:Type>xs:dateTime</v8:Type>
+			<v8:DateQualifiers>
+				<v8:DateFractions>Date</v8:DateFractions>
+			</v8:DateQualifiers>
+		</valueType>
+		<value xsi:type="xs:dateTime">0001-01-01T00:00:00</value>
+		<useRestriction>false</useRestriction>
+	</parameter>
+	<settingsVariant>
+		<dcsset:name>Основной</dcsset:name>
+		<dcsset:presentation xsi:type="xs:string">Основной</dcsset:presentation>
+		<dcsset:settings xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows">
+			<dcsset:selection>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Заказ</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>НомерЗаказаНаСайте</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ДатаЗаказаНаСайте</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Склад</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ЖелаемаяДатаОтгрузки</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ПериодДоставки</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Статус</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ИнициаторОтмены</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ПользовательОтмены</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ДатаПоследнегоИзменения</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Комплектовщик</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>АдресДоставки</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ПокупательФИО</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ПокупательТелефон</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ПокупательEmail</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Комментарий</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>КоличествоСтрок</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>ТрекНомер</dcsset:field>
+				</dcsset:item>
+			</dcsset:selection>
+			<dcsset:filter>
+				<dcsset:item xsi:type="dcsset:FilterItemComparison">
+					<dcsset:use>false</dcsset:use>
+					<dcsset:left xsi:type="dcscor:Field">НомерЗаказаНаСайте</dcsset:left>
+					<dcsset:comparisonType>Equal</dcsset:comparisonType>
+					<dcsset:right xsi:type="xs:string"/>
+					<dcsset:userSettingID>5dc8a283-7d63-4c63-8ff4-1150ba60a8af</dcsset:userSettingID>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:FilterItemComparison">
+					<dcsset:use>false</dcsset:use>
+					<dcsset:left xsi:type="dcscor:Field">Склад</dcsset:left>
+					<dcsset:comparisonType>Equal</dcsset:comparisonType>
+					<dcsset:userSettingID>2c76d096-cfe6-464a-9777-de7bd3afc5a6</dcsset:userSettingID>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:FilterItemComparison">
+					<dcsset:use>false</dcsset:use>
+					<dcsset:left xsi:type="dcscor:Field">Заказ</dcsset:left>
+					<dcsset:comparisonType>Equal</dcsset:comparisonType>
+					<dcsset:userSettingID>fd3604f6-f5d7-4311-95b1-6a9f28f3cff2</dcsset:userSettingID>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:FilterItemGroup">
+					<dcsset:groupType>OrGroup</dcsset:groupType>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ОтменаСайтом</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+						<dcsset:presentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена сайтом</v8:content>
+							</v8:item>
+						</dcsset:presentation>
+						<dcsset:userSettingID>9dc586f4-2ead-4f57-9c57-bab2c5d4e59d</dcsset:userSettingID>
+						<dcsset:userSettingPresentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена сайтом</v8:content>
+							</v8:item>
+						</dcsset:userSettingPresentation>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ОтменаКурьером</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+						<dcsset:presentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена курьером</v8:content>
+							</v8:item>
+						</dcsset:presentation>
+						<dcsset:userSettingID>b52a4bc9-ab4b-4c86-956d-4a6d8fb55fd2</dcsset:userSettingID>
+						<dcsset:userSettingPresentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена курьером</v8:content>
+							</v8:item>
+						</dcsset:userSettingPresentation>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:left xsi:type="dcscor:Field">ОтменаМагазином</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+						<dcsset:presentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена магазином</v8:content>
+							</v8:item>
+						</dcsset:presentation>
+						<dcsset:userSettingID>8796efb5-dec6-4b56-9b46-0ca8c9e22d69</dcsset:userSettingID>
+						<dcsset:userSettingPresentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена магазином</v8:content>
+							</v8:item>
+						</dcsset:userSettingPresentation>
+					</dcsset:item>
+					<dcsset:item xsi:type="dcsset:FilterItemComparison">
+						<dcsset:use>false</dcsset:use>
+						<dcsset:left xsi:type="dcscor:Field">ОтменаТехподдержкой</dcsset:left>
+						<dcsset:comparisonType>Equal</dcsset:comparisonType>
+						<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+						<dcsset:presentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена техподдержкой</v8:content>
+							</v8:item>
+						</dcsset:presentation>
+						<dcsset:userSettingID>781d814e-b871-4d27-9cc2-6a120e7b6482</dcsset:userSettingID>
+						<dcsset:userSettingPresentation xsi:type="v8:LocalStringType">
+							<v8:item>
+								<v8:lang>ru</v8:lang>
+								<v8:content>Отмена техподдержкой</v8:content>
+							</v8:item>
+						</dcsset:userSettingPresentation>
+					</dcsset:item>
+					<dcsset:userSettingID>0607a0e3-3edd-4a5c-96ad-698c9a08ab2a</dcsset:userSettingID>
+				</dcsset:item>
+			</dcsset:filter>
+			<dcsset:dataParameters>
+				<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+					<dcscor:parameter>ЖелаемаяДатаОтгрузкиНачало</dcscor:parameter>
+					<dcscor:value xsi:type="v8:StandardBeginningDate">
+						<v8:variant xsi:type="v8:StandardBeginningDateVariant">BeginningOfLastDay</v8:variant>
+					</dcscor:value>
+					<dcsset:userSettingID>77003c46-9274-48dc-9739-7bd725c3a48a</dcsset:userSettingID>
+				</dcscor:item>
+				<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+					<dcscor:parameter>ЖелаемаяДатаОтгрузкиОкончание</dcscor:parameter>
+					<dcscor:value xsi:type="v8:StandardBeginningDate">
+						<v8:variant xsi:type="v8:StandardBeginningDateVariant">BeginningOfNextDay</v8:variant>
+					</dcscor:value>
+					<dcsset:userSettingID>56c05454-508f-426c-a665-768c0ad011be</dcsset:userSettingID>
+				</dcscor:item>
+			</dcsset:dataParameters>
+			<dcsset:conditionalAppearance>
+				<dcsset:item>
+					<dcsset:selection>
+						<dcsset:item>
+							<dcsset:field>Статус</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ПользовательОтмены</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ИнициаторОтмены</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ДатаПоследнегоИзменения</dcsset:field>
+						</dcsset:item>
+					</dcsset:selection>
+					<dcsset:filter>
+						<dcsset:item xsi:type="dcsset:FilterItemComparison">
+							<dcsset:left xsi:type="dcscor:Field">ОтменаСайтом</dcsset:left>
+							<dcsset:comparisonType>Equal</dcsset:comparisonType>
+							<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+						</dcsset:item>
+					</dcsset:filter>
+					<dcsset:appearance>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ЦветФона</dcscor:parameter>
+							<dcscor:value xsi:type="v8ui:Color">auto</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ЦветТекста</dcscor:parameter>
+							<dcscor:value xsi:type="v8ui:Color">#000000</dcscor:value>
+						</dcscor:item>
+					</dcsset:appearance>
+				</dcsset:item>
+				<dcsset:item>
+					<dcsset:selection>
+						<dcsset:item>
+							<dcsset:field>Статус</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ИнициаторОтмены</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ПользовательОтмены</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ДатаПоследнегоИзменения</dcsset:field>
+						</dcsset:item>
+					</dcsset:selection>
+					<dcsset:filter>
+						<dcsset:item xsi:type="dcsset:FilterItemComparison">
+							<dcsset:left xsi:type="dcscor:Field">ОтменаМагазином</dcsset:left>
+							<dcsset:comparisonType>Equal</dcsset:comparisonType>
+							<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+						</dcsset:item>
+					</dcsset:filter>
+					<dcsset:appearance>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ЦветФона</dcscor:parameter>
+							<dcscor:value xsi:type="v8ui:Color">web:LightGoldenRodYellow</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ЦветТекста</dcscor:parameter>
+							<dcscor:value xsi:type="v8ui:Color">#000000</dcscor:value>
+						</dcscor:item>
+					</dcsset:appearance>
+				</dcsset:item>
+				<dcsset:item>
+					<dcsset:selection>
+						<dcsset:item>
+							<dcsset:field>Статус</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ПользовательОтмены</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ИнициаторОтмены</dcsset:field>
+						</dcsset:item>
+						<dcsset:item>
+							<dcsset:field>ДатаПоследнегоИзменения</dcsset:field>
+						</dcsset:item>
+					</dcsset:selection>
+					<dcsset:filter>
+						<dcsset:item xsi:type="dcsset:FilterItemComparison">
+							<dcsset:left xsi:type="dcscor:Field">ОтменаКурьером</dcsset:left>
+							<dcsset:comparisonType>Equal</dcsset:comparisonType>
+							<dcsset:right xsi:type="xs:boolean">true</dcsset:right>
+						</dcsset:item>
+					</dcsset:filter>
+					<dcsset:appearance>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ЦветФона</dcscor:parameter>
+							<dcscor:value xsi:type="v8ui:Color">web:MediumGreen</dcscor:value>
+						</dcscor:item>
+						<dcscor:item xsi:type="dcsset:SettingsParameterValue">
+							<dcscor:parameter>ЦветТекста</dcscor:parameter>
+							<dcscor:value xsi:type="v8ui:Color">#000000</dcscor:value>
+						</dcscor:item>
+					</dcsset:appearance>
+				</dcsset:item>
+			</dcsset:conditionalAppearance>
+			<dcsset:item xsi:type="dcsset:StructureItemGroup">
+				<dcsset:order>
+					<dcsset:item xsi:type="dcsset:OrderItemAuto"/>
+				</dcsset:order>
+				<dcsset:selection>
+					<dcsset:item xsi:type="dcsset:SelectedItemAuto"/>
+				</dcsset:selection>
+			</dcsset:item>
+		</dcsset:settings>
+	</settingsVariant>
+</DataCompositionSchema>

@@ -1,0 +1,389 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcssch="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>5</v8:content>
+		</v8:item>
+	</Title>
+	<VerticalScroll>useIfNecessary</VerticalScroll>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>false</Autofill>
+	</AutoCommandBar>
+	<ChildItems>
+		<UsualGroup name="Группа1" id="2">
+			<Group>Vertical</Group>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="Группа1РасширеннаяПодсказка" id="165"/>
+			<ChildItems>
+				<UsualGroup name="Группа2" id="3">
+					<Group>Vertical</Group>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="Группа2РасширеннаяПодсказка" id="166"/>
+					<ChildItems>
+						<Table name="СписокЗаказов" id="5">
+							<UseAlternationRowColor>true</UseAlternationRowColor>
+							<EnableStartDrag>true</EnableStartDrag>
+							<FileDragMode>AsFile</FileDragMode>
+							<DataPath>СписокЗаказов</DataPath>
+							<RowPictureDataPath>~СписокЗаказов.DefaultPicture</RowPictureDataPath>
+							<SearchStringLocation>None</SearchStringLocation>
+							<ViewStatusLocation>None</ViewStatusLocation>
+							<SearchControlLocation>None</SearchControlLocation>
+							<AutoRefresh>false</AutoRefresh>
+							<AutoRefreshPeriod>60</AutoRefreshPeriod>
+							<Period>
+								<v8:variant xsi:type="v8:StandardPeriodVariant">Custom</v8:variant>
+								<v8:startDate>0001-01-01T00:00:00</v8:startDate>
+								<v8:endDate>0001-01-01T00:00:00</v8:endDate>
+							</Period>
+							<ChoiceFoldersAndItems>Items</ChoiceFoldersAndItems>
+							<RestoreCurrentRow>false</RestoreCurrentRow>
+							<TopLevelParent xsi:nil="true"/>
+							<ShowRoot>true</ShowRoot>
+							<AllowRootChoice>false</AllowRootChoice>
+							<UpdateOnDataChange>Auto</UpdateOnDataChange>
+							<AllowGettingCurrentRowURL>true</AllowGettingCurrentRowURL>
+							<ContextMenu name="СписокЗаказовКонтекстноеМеню" id="6"/>
+							<AutoCommandBar name="СписокЗаказовКоманднаяПанель" id="7">
+								<Autofill>false</Autofill>
+							</AutoCommandBar>
+							<ExtendedTooltip name="СписокЗаказовРасширеннаяПодсказка" id="167"/>
+							<SearchStringAddition name="СписокЗаказовСтрокаПоиска" id="168">
+								<AdditionSource>
+									<Item>СписокЗаказов</Item>
+									<Type>SearchStringRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="СписокЗаказовСтрокаПоискаКонтекстноеМеню" id="169"/>
+								<ExtendedTooltip name="СписокЗаказовСтрокаПоискаРасширеннаяПодсказка" id="170"/>
+							</SearchStringAddition>
+							<ViewStatusAddition name="СписокЗаказовСостояниеПросмотра" id="171">
+								<AdditionSource>
+									<Item>СписокЗаказов</Item>
+									<Type>ViewStatusRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="СписокЗаказовСостояниеПросмотраКонтекстноеМеню" id="172"/>
+								<ExtendedTooltip name="СписокЗаказовСостояниеПросмотраРасширеннаяПодсказка" id="173"/>
+							</ViewStatusAddition>
+							<SearchControlAddition name="СписокЗаказовУправлениеПоиском" id="174">
+								<AdditionSource>
+									<Item>СписокЗаказов</Item>
+									<Type>SearchControl</Type>
+								</AdditionSource>
+								<ContextMenu name="СписокЗаказовУправлениеПоискомКонтекстноеМеню" id="175"/>
+								<ExtendedTooltip name="СписокЗаказовУправлениеПоискомРасширеннаяПодсказка" id="176"/>
+							</SearchControlAddition>
+							<ChildItems>
+								<CheckBoxField name="СписокЗаказовПроведен" id="162">
+									<DataPath>~СписокЗаказов.Posted</DataPath>
+									<CheckBoxType>Auto</CheckBoxType>
+									<ContextMenu name="СписокЗаказовПроведенКонтекстноеМеню" id="163"/>
+									<ExtendedTooltip name="СписокЗаказовПроведенРасширеннаяПодсказка" id="177"/>
+								</CheckBoxField>
+								<LabelField name="СписокЗаказовДата" id="10">
+									<DataPath>~СписокЗаказов.Date</DataPath>
+									<ContextMenu name="СписокЗаказовДатаКонтекстноеМеню" id="11"/>
+									<ExtendedTooltip name="СписокЗаказовДатаРасширеннаяПодсказка" id="178"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовНомер" id="14">
+									<DataPath>~СписокЗаказов.Number</DataPath>
+									<ContextMenu name="СписокЗаказовНомерКонтекстноеМеню" id="15"/>
+									<ExtendedTooltip name="СписокЗаказовНомерРасширеннаяПодсказка" id="179"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовСсылка" id="18">
+									<DataPath>~СписокЗаказов.Ref</DataPath>
+									<Visible>false</Visible>
+									<ContextMenu name="СписокЗаказовСсылкаКонтекстноеМеню" id="19"/>
+									<ExtendedTooltip name="СписокЗаказовСсылкаРасширеннаяПодсказка" id="180"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовАдресДоставки" id="20">
+									<DataPath>~СписокЗаказов.АдресДоставки</DataPath>
+									<ContextMenu name="СписокЗаказовАдресДоставкиКонтекстноеМеню" id="21"/>
+									<ExtendedTooltip name="СписокЗаказовАдресДоставкиРасширеннаяПодсказка" id="181"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовВитринаИнтернетМагазина" id="26">
+									<DataPath>~СписокЗаказов.ВитринаИнтернетМагазина</DataPath>
+									<ContextMenu name="СписокЗаказовВитринаИнтернетМагазинаКонтекстноеМеню" id="27"/>
+									<ExtendedTooltip name="СписокЗаказовВитринаИнтернетМагазинаРасширеннаяПодсказка" id="182"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовВремяДоставкиС" id="32">
+									<DataPath>~СписокЗаказов.ВремяДоставкиС</DataPath>
+									<ContextMenu name="СписокЗаказовВремяДоставкиСКонтекстноеМеню" id="33"/>
+									<ExtendedTooltip name="СписокЗаказовВремяДоставкиСРасширеннаяПодсказка" id="183"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовВремяДоставкиПо" id="30">
+									<DataPath>~СписокЗаказов.ВремяДоставкиПо</DataPath>
+									<ContextMenu name="СписокЗаказовВремяДоставкиПоКонтекстноеМеню" id="31"/>
+									<ExtendedTooltip name="СписокЗаказовВремяДоставкиПоРасширеннаяПодсказка" id="184"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовЖелаемаяДатаОтгрузки" id="54">
+									<DataPath>~СписокЗаказов.ЖелаемаяДатаОтгрузки</DataPath>
+									<ContextMenu name="СписокЗаказовЖелаемаяДатаОтгрузкиКонтекстноеМеню" id="55"/>
+									<ExtendedTooltip name="СписокЗаказовЖелаемаяДатаОтгрузкиРасширеннаяПодсказка" id="185"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовЗонаДоставки" id="58">
+									<DataPath>~СписокЗаказов.ЗонаДоставки</DataPath>
+									<ContextMenu name="СписокЗаказовЗонаДоставкиКонтекстноеМеню" id="59"/>
+									<ExtendedTooltip name="СписокЗаказовЗонаДоставкиРасширеннаяПодсказка" id="186"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовКомментарий" id="66">
+									<DataPath>~СписокЗаказов.Комментарий</DataPath>
+									<ContextMenu name="СписокЗаказовКомментарийКонтекстноеМеню" id="67"/>
+									<ExtendedTooltip name="СписокЗаказовКомментарийРасширеннаяПодсказка" id="187"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовМенеджер" id="74">
+									<DataPath>~СписокЗаказов.Менеджер</DataPath>
+									<ContextMenu name="СписокЗаказовМенеджерКонтекстноеМеню" id="75"/>
+									<ExtendedTooltip name="СписокЗаказовМенеджерРасширеннаяПодсказка" id="188"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовПокупательФИО" id="100">
+									<DataPath>~СписокЗаказов.ПокупательФИО</DataPath>
+									<ContextMenu name="СписокЗаказовПокупательФИОКонтекстноеМеню" id="101"/>
+									<ExtendedTooltip name="СписокЗаказовПокупательФИОРасширеннаяПодсказка" id="189"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовПокупательТелефон" id="98">
+									<DataPath>~СписокЗаказов.ПокупательТелефон</DataPath>
+									<ContextMenu name="СписокЗаказовПокупательТелефонКонтекстноеМеню" id="99"/>
+									<ExtendedTooltip name="СписокЗаказовПокупательТелефонРасширеннаяПодсказка" id="190"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовПокупательEmail" id="96">
+									<DataPath>~СписокЗаказов.ПокупательEmail</DataPath>
+									<ContextMenu name="СписокЗаказовПокупательEmailКонтекстноеМеню" id="97"/>
+									<ExtendedTooltip name="СписокЗаказовПокупательEmailРасширеннаяПодсказка" id="191"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовПредыдущийСтатус" id="102">
+									<DataPath>~СписокЗаказов.ПредыдущийСтатус</DataPath>
+									<ContextMenu name="СписокЗаказовПредыдущийСтатусКонтекстноеМеню" id="103"/>
+									<ExtendedTooltip name="СписокЗаказовПредыдущийСтатусРасширеннаяПодсказка" id="192"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовСклад" id="114">
+									<DataPath>~СписокЗаказов.Склад</DataPath>
+									<ContextMenu name="СписокЗаказовСкладКонтекстноеМеню" id="115"/>
+									<ExtendedTooltip name="СписокЗаказовСкладРасширеннаяПодсказка" id="193"/>
+								</LabelField>
+								<CheckBoxField name="СписокЗаказовСогласован" id="116">
+									<DataPath>~СписокЗаказов.Согласован</DataPath>
+									<CheckBoxType>Auto</CheckBoxType>
+									<ContextMenu name="СписокЗаказовСогласованКонтекстноеМеню" id="117"/>
+									<ExtendedTooltip name="СписокЗаказовСогласованРасширеннаяПодсказка" id="194"/>
+								</CheckBoxField>
+								<LabelField name="СписокЗаказовСтатус" id="120">
+									<DataPath>~СписокЗаказов.Статус</DataPath>
+									<ContextMenu name="СписокЗаказовСтатусКонтекстноеМеню" id="121"/>
+									<ExtendedTooltip name="СписокЗаказовСтатусРасширеннаяПодсказка" id="195"/>
+								</LabelField>
+								<LabelField name="СписокЗаказовСтатусПроверки" id="122">
+									<DataPath>~СписокЗаказов.СтатусПроверки</DataPath>
+									<ContextMenu name="СписокЗаказовСтатусПроверкиКонтекстноеМеню" id="123"/>
+									<ExtendedTooltip name="СписокЗаказовСтатусПроверкиРасширеннаяПодсказка" id="196"/>
+								</LabelField>
+							</ChildItems>
+						</Table>
+					</ChildItems>
+				</UsualGroup>
+				<UsualGroup name="Группа3" id="4">
+					<Group>Horizontal</Group>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="Группа3РасширеннаяПодсказка" id="197"/>
+					<ChildItems>
+						<Button name="РазрешитьОтгрузку" id="160">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.РазрешитьОтгрузку</CommandName>
+							<ExtendedTooltip name="РазрешитьОтгрузкуРасширеннаяПодсказка" id="198"/>
+						</Button>
+						<Button name="ЗапретитьОтгрузку" id="161">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.ЗапретитьОтгрузку</CommandName>
+							<ExtendedTooltip name="ЗапретитьОтгрузкуРасширеннаяПодсказка" id="199"/>
+						</Button>
+						<Button name="ВыполнитьКоманда" id="164">
+							<Type>UsualButton</Type>
+							<Visible>false</Visible>
+							<CommandName>Form.Command.ВыполнитьКоманда</CommandName>
+							<ExtendedTooltip name="ВыполнитьКомандаРасширеннаяПодсказка" id="200"/>
+						</Button>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:ExternalDataProcessorObject.АРМИнтернетЗаказов</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="Реквизит1" id="2">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="СписокЗаказов" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Список заказов</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>cfg:DynamicList</v8:Type>
+			</Type>
+			<Settings xsi:type="DynamicList">
+				<ManualQuery>true</ManualQuery>
+				<DynamicDataRead>false</DynamicDataRead>
+				<QueryText>ВЫБРАТЬ
+	ЗаказКлиента.Ссылка,
+	ЗаказКлиента.ВерсияДанных,
+	ЗаказКлиента.ПометкаУдаления,
+	ЗаказКлиента.Номер,
+	ЗаказКлиента.Дата,
+	ЗаказКлиента.Проведен,
+	ЗаказКлиента.Партнер,
+	ЗаказКлиента.Контрагент,
+	ЗаказКлиента.Организация,
+	ЗаказКлиента.Соглашение,
+	ЗаказКлиента.Сделка,
+	ЗаказКлиента.Валюта,
+	ЗаказКлиента.СуммаДокумента,
+	ЗаказКлиента.ГрафикОплаты,
+	ЗаказКлиента.ЖелаемаяДатаОтгрузки,
+	ЗаказКлиента.Склад,
+	ЗаказКлиента.ЦенаВключаетНДС,
+	ЗаказКлиента.Менеджер,
+	ЗаказКлиента.ДополнительнаяИнформация,
+	ЗаказКлиента.ДокументОснование,
+	ЗаказКлиента.Приоритет,
+	ЗаказКлиента.НеОтгружатьЧастями,
+	ЗаказКлиента.Статус,
+	ЗаказКлиента.МаксимальныйКодСтроки,
+	ЗаказКлиента.ДатаСогласования,
+	ЗаказКлиента.Согласован,
+	ЗаказКлиента.ФормаОплаты,
+	ЗаказКлиента.БанковскийСчет,
+	ЗаказКлиента.Касса,
+	ЗаказКлиента.СуммаАвансаДоОбеспечения,
+	ЗаказКлиента.СуммаПредоплатыДоОтгрузки,
+	ЗаказКлиента.ДатаПервойОтгрузки,
+	ЗаказКлиента.АдресДоставки,
+	ЗаказКлиента.НалогообложениеНДС,
+	ЗаказКлиента.СкидкиРассчитаны,
+	ЗаказКлиента.ХозяйственнаяОперация,
+	ЗаказКлиента.Комментарий,
+	ЗаказКлиента.НомерПоДаннымКлиента,
+	ЗаказКлиента.ДатаПоДаннымКлиента,
+	ЗаказКлиента.УчетВЕГАИС,
+	ЗаказКлиента.ЧекПродажа,
+	ЗаказКлиента.ИнтернетМагазин,
+	ЗаказКлиента.ЗонаДоставки,
+	ЗаказКлиента.ВремяДоставкиС,
+	ЗаказКлиента.ВремяДоставкиПо,
+	ЗаказКлиента.ДатаЗаказаНаСайте,
+	ЗаказКлиента.НомерЗаказаНаСайте,
+	ЗаказКлиента.ПокупательФИО,
+	ЗаказКлиента.Комплектовщик,
+	ЗаказКлиента.ПокупательEmail,
+	ЗаказКлиента.ПокупательТелефон,
+	ЗаказКлиента.ДатаНачалаКомплектовки,
+	ЗаказКлиента.ДатаОкончанияКомплектовки,
+	ЗаказКлиента.ТерминалИд,
+	ЗаказКлиента.НомерЧекаФД,
+	ЗаказКлиента.НомерЧекаВСмене,
+	ЗаказКлиента.КассаККМ,
+	ЗаказКлиента.ВитринаИнтернетМагазина,
+	ЗаказКлиента.ФПД,
+	ЗаказКлиента.ЗН_ККТ,
+	ЗаказКлиента.СтатусПроверки,
+	ЗаказКлиента.ЭтоЧисло1,
+	ЗаказКлиента.ЭтоСтрока1,
+	ЗаказКлиента.ЭтоДата,
+	ЗаказКлиента.ЭтоДокументСсылка,
+	ЗаказКлиента.ЭтоЧисло2,
+	ЗаказКлиента.ЭтоДокументСсылка1,
+	ЗаказКлиента.Широта,
+	ЗаказКлиента.Долгота,
+	ЗаказКлиента.ОСП_ИД,
+	ЗаказКлиента.ТрекНомер,
+	ЗаказКлиента.ВозможнаЗамена,
+	ЗаказКлиента.ОтменаКлиентом,
+	ЗаказКлиента.рБулево,
+	ЗаказКлиента.рБулево1
+ИЗ
+	Документ.ЗаказКлиента КАК ЗаказКлиента
+ГДЕ
+	ЗаказКлиента.ВитринаИнтернетМагазина = ЗНАЧЕНИЕ(Справочник.ВитриныИнтернетМагазина.Игрушки)
+	И ЗаказКлиента.Статус &lt;&gt; ЗНАЧЕНИЕ(Перечисление.СтатусыЗаказовКлиентов.Закрыт)</QueryText>
+				<ListSettings>
+					<dcsset:filter>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>dfcece9d-5077-440b-b6b3-45a5cb4538eb</dcsset:userSettingID>
+					</dcsset:filter>
+					<dcsset:order>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>88619765-ccb3-46c6-ac52-38e9c992ebd4</dcsset:userSettingID>
+					</dcsset:order>
+					<dcsset:conditionalAppearance>
+						<dcsset:viewMode>Normal</dcsset:viewMode>
+						<dcsset:userSettingID>b75fecce-942b-4aed-abc9-e6a02e460fb3</dcsset:userSettingID>
+					</dcsset:conditionalAppearance>
+					<dcsset:itemsViewMode>Normal</dcsset:itemsViewMode>
+					<dcsset:itemsUserSettingID>911b6018-f537-43e8-a417-da56b22f9aec</dcsset:itemsUserSettingID>
+				</ListSettings>
+			</Settings>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="ВыполнитьКоманда" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выполнить</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выполнить команда</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ВыполнитьКоманда</Action>
+		</Command>
+		<Command name="РазрешитьОтгрузку" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Разрешить отгрузку</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Разрешить отгрузку</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>РазрешитьОтгрузку</Action>
+		</Command>
+		<Command name="ЗапретитьОтгрузку" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запретить отгрузку</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запретить отгрузку</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗапретитьОтгрузку</Action>
+		</Command>
+	</Commands>
+</Form>

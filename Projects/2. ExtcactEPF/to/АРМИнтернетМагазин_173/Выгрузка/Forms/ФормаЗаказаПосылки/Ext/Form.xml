@@ -1,0 +1,595 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcssch="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Заказ посылочной торговли</v8:content>
+		</v8:item>
+	</Title>
+	<WindowOpeningMode>LockOwnerWindow</WindowOpeningMode>
+	<AutoTitle>false</AutoTitle>
+	<VerticalScroll>useIfNecessary</VerticalScroll>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<ChildItems>
+			<Button name="ФормаПеречитатьДанные" id="54">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.ПеречитатьДанные</CommandName>
+				<ExtendedTooltip name="ФормаПеречитатьДанныеРасширеннаяПодсказка" id="57"/>
+			</Button>
+			<Button name="ФормаРазрешитьОтгрузку" id="52">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.РазрешитьОтгрузку</CommandName>
+				<ExtendedTooltip name="ФормаРазрешитьОтгрузкуРасширеннаяПодсказка" id="58"/>
+			</Button>
+			<Button name="ФормаЗапретитьОтгрузку" id="53">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.ЗапретитьОтгрузку</CommandName>
+				<ExtendedTooltip name="ФормаЗапретитьОтгрузкуРасширеннаяПодсказка" id="59"/>
+			</Button>
+		</ChildItems>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnOpen">ПриОткрытии</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="ГруппаЗаказ" id="37">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заказ</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Группа заказ</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Group>Vertical</Group>
+			<Behavior>Usual</Behavior>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="ГруппаЗаказРасширеннаяПодсказка" id="60"/>
+			<ChildItems>
+				<LabelField name="Заказ" id="55">
+					<DataPath>Заказ</DataPath>
+					<Hiperlink>true</Hiperlink>
+					<ContextMenu name="ЗаказКонтекстноеМеню" id="56"/>
+					<ExtendedTooltip name="ЗаказРасширеннаяПодсказка" id="61"/>
+					<Events>
+						<Event name="Click">ЗаказНажатие</Event>
+					</Events>
+				</LabelField>
+				<InputField name="ЗаказНомерДата" id="38">
+					<DataPath>ЗаказНомерДата</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<ContextMenu name="ЗаказНомерДатаКонтекстноеМеню" id="39"/>
+					<ExtendedTooltip name="ЗаказНомерДатаРасширеннаяПодсказка" id="62"/>
+				</InputField>
+				<InputField name="ЖелаемаяДатаОтгрузки" id="40">
+					<DataPath>ЖелаемаяДатаОтгрузки</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<ContextMenu name="ЖелаемаяДатаОтгрузкиКонтекстноеМеню" id="41"/>
+					<ExtendedTooltip name="ЖелаемаяДатаОтгрузкиРасширеннаяПодсказка" id="63"/>
+				</InputField>
+				<InputField name="АдресДоставки" id="42">
+					<DataPath>АдресДоставки</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<TitleLocation>Left</TitleLocation>
+					<Height>2</Height>
+					<MultiLine>true</MultiLine>
+					<ContextMenu name="АдресДоставкиКонтекстноеМеню" id="43"/>
+					<ExtendedTooltip name="АдресДоставкиРасширеннаяПодсказка" id="64"/>
+				</InputField>
+				<InputField name="ПокупательФИО" id="44">
+					<DataPath>ПокупательФИО</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<ContextMenu name="ПокупательФИОКонтекстноеМеню" id="45"/>
+					<ExtendedTooltip name="ПокупательФИОРасширеннаяПодсказка" id="65"/>
+				</InputField>
+				<InputField name="Телефон" id="46">
+					<DataPath>Телефон</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<ContextMenu name="ТелефонКонтекстноеМеню" id="47"/>
+					<ExtendedTooltip name="ТелефонРасширеннаяПодсказка" id="66"/>
+				</InputField>
+				<InputField name="Email" id="48">
+					<DataPath>Email</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<ContextMenu name="EmailКонтекстноеМеню" id="49"/>
+					<ExtendedTooltip name="EmailРасширеннаяПодсказка" id="67"/>
+				</InputField>
+				<InputField name="Комментарий" id="50">
+					<DataPath>Комментарий</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<TitleLocation>Left</TitleLocation>
+					<Height>2</Height>
+					<MultiLine>true</MultiLine>
+					<ContextMenu name="КомментарийКонтекстноеМеню" id="51"/>
+					<ExtendedTooltip name="КомментарийРасширеннаяПодсказка" id="68"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+		<Table name="ТЗЗаказыИгрушкиТовары" id="18">
+			<Representation>List</Representation>
+			<ReadOnly>true</ReadOnly>
+			<Footer>true</Footer>
+			<AutoInsertNewRow>true</AutoInsertNewRow>
+			<EnableStartDrag>true</EnableStartDrag>
+			<EnableDrag>true</EnableDrag>
+			<FileDragMode>AsFile</FileDragMode>
+			<DataPath>ТЗЗаказыИгрушкиТовары</DataPath>
+			<SearchStringLocation>None</SearchStringLocation>
+			<ViewStatusLocation>None</ViewStatusLocation>
+			<SearchControlLocation>None</SearchControlLocation>
+			<RowFilter xsi:nil="true"/>
+			<ContextMenu name="ТЗЗаказыИгрушкиТоварыКонтекстноеМеню" id="19"/>
+			<AutoCommandBar name="ТЗЗаказыИгрушкиТоварыКоманднаяПанель" id="20">
+				<Autofill>false</Autofill>
+			</AutoCommandBar>
+			<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыРасширеннаяПодсказка" id="69"/>
+			<SearchStringAddition name="ТЗЗаказыИгрушкиТоварыСтрокаПоиска" id="70">
+				<AdditionSource>
+					<Item>ТЗЗаказыИгрушкиТовары</Item>
+					<Type>SearchStringRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="ТЗЗаказыИгрушкиТоварыСтрокаПоискаКонтекстноеМеню" id="71"/>
+				<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыСтрокаПоискаРасширеннаяПодсказка" id="72"/>
+			</SearchStringAddition>
+			<ViewStatusAddition name="ТЗЗаказыИгрушкиТоварыСостояниеПросмотра" id="73">
+				<AdditionSource>
+					<Item>ТЗЗаказыИгрушкиТовары</Item>
+					<Type>ViewStatusRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="ТЗЗаказыИгрушкиТоварыСостояниеПросмотраКонтекстноеМеню" id="74"/>
+				<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыСостояниеПросмотраРасширеннаяПодсказка" id="75"/>
+			</ViewStatusAddition>
+			<SearchControlAddition name="ТЗЗаказыИгрушкиТоварыУправлениеПоиском" id="76">
+				<AdditionSource>
+					<Item>ТЗЗаказыИгрушкиТовары</Item>
+					<Type>SearchControl</Type>
+				</AdditionSource>
+				<ContextMenu name="ТЗЗаказыИгрушкиТоварыУправлениеПоискомКонтекстноеМеню" id="77"/>
+				<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыУправлениеПоискомРасширеннаяПодсказка" id="78"/>
+			</SearchControlAddition>
+			<ChildItems>
+				<InputField name="ТЗЗаказыИгрушкиТоварыНоменклатура" id="21">
+					<DataPath>ТЗЗаказыИгрушкиТовары.Номенклатура</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ShowInFooter>false</ShowInFooter>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыНоменклатураКонтекстноеМеню" id="22"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыНоменклатураРасширеннаяПодсказка" id="79"/>
+				</InputField>
+				<InputField name="ТЗЗаказыИгрушкиТоварыНаименованиеТовараКлиента" id="35">
+					<DataPath>ТЗЗаказыИгрушкиТовары.НаименованиеТовараКлиента</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ShowInFooter>false</ShowInFooter>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыНаименованиеТовараКлиентаКонтекстноеМеню" id="36"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыНаименованиеТовараКлиентаРасширеннаяПодсказка" id="80"/>
+				</InputField>
+				<InputField name="ТЗЗаказыИгрушкиТоварыКоличествоВЗаказе" id="23">
+					<DataPath>ТЗЗаказыИгрушкиТовары.КоличествоВЗаказе</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыКоличествоВЗаказеКонтекстноеМеню" id="24"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыКоличествоВЗаказеРасширеннаяПодсказка" id="81"/>
+				</InputField>
+				<InputField name="ТЗЗаказыИгрушкиТоварыКоличествоСобрано" id="25">
+					<DataPath>ТЗЗаказыИгрушкиТовары.КоличествоСобрано</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыКоличествоСобраноКонтекстноеМеню" id="26"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыКоличествоСобраноРасширеннаяПодсказка" id="82"/>
+				</InputField>
+				<InputField name="ТЗЗаказыИгрушкиТоварыЦена" id="27">
+					<DataPath>ТЗЗаказыИгрушкиТовары.Цена</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ShowInFooter>false</ShowInFooter>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыЦенаКонтекстноеМеню" id="28"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыЦенаРасширеннаяПодсказка" id="83"/>
+				</InputField>
+				<InputField name="ТЗЗаказыИгрушкиТоварыСумма" id="29">
+					<DataPath>ТЗЗаказыИгрушкиТовары.Сумма</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыСуммаКонтекстноеМеню" id="30"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыСуммаРасширеннаяПодсказка" id="84"/>
+				</InputField>
+				<InputField name="ТЗЗаказыИгрушкиТоварыСтавкаНДС" id="31">
+					<DataPath>ТЗЗаказыИгрушкиТовары.СтавкаНДС</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыСтавкаНДСКонтекстноеМеню" id="32"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыСтавкаНДСРасширеннаяПодсказка" id="85"/>
+				</InputField>
+				<InputField name="ТЗЗаказыИгрушкиТоварыСуммаНДС" id="33">
+					<DataPath>ТЗЗаказыИгрушкиТовары.СуммаНДС</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ТЗЗаказыИгрушкиТоварыСуммаНДСКонтекстноеМеню" id="34"/>
+					<ExtendedTooltip name="ТЗЗаказыИгрушкиТоварыСуммаНДСРасширеннаяПодсказка" id="86"/>
+				</InputField>
+			</ChildItems>
+		</Table>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:ExternalDataProcessorObject.АРМИнтернетМагазин</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="Заказ" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заказ</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаказНомерДата" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Номер и дата сайта</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>150</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ТЗЗаказыИгрушкиТовары" id="6">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>ТЗЗаказы игрушки товары</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="Номенклатура" id="1">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Номенклатура</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="КоличествоВЗаказе" id="2">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Количество в заказе</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>15</v8:Digits>
+							<v8:FractionDigits>3</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="КоличествоСобрано" id="3">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Количество собрано</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>15</v8:Digits>
+							<v8:FractionDigits>3</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="Цена" id="4">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Цена</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>15</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="Сумма" id="5">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>15</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="СтавкаНДС" id="6">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Ставка НДС</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="СуммаНДС" id="7">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма НДС</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>15</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="НаименованиеТовараКлиента" id="8">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Наименование товара клиента</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>150</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="ЖелаемаяДатаОтгрузки" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Дата отгрузки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:dateTime</v8:Type>
+				<v8:DateQualifiers>
+					<v8:DateFractions>Date</v8:DateFractions>
+				</v8:DateQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="АдресДоставки" id="7">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Адрес доставки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ПокупательФИО" id="8">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Покупатель ФИО</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>150</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="Телефон" id="9">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Телефон</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>150</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="Email" id="10">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Email</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>150</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="Комментарий" id="11">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Комментарий</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаказНомер" id="5">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заказ номер</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>11</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ЗаказДата" id="12">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заказ дата</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:dateTime</v8:Type>
+				<v8:DateQualifiers>
+					<v8:DateFractions>DateTime</v8:DateFractions>
+				</v8:DateQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ПоследнийНомерВерсииЗаказа" id="13">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Последний номер версии заказа</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>0</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="СтатусПроверки" id="14">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Статус проверки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>15</v8:Digits>
+					<v8:FractionDigits>3</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="ЗапретитьОтгрузку" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запретить отгрузку</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запретить отгрузку</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>StdPicture.Stop</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ИгрушкиЗапретитьОтгрузку</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+		<Command name="РазрешитьОтгрузку" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Разрешить отгрузку</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Разрешить отгрузку</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ИгрушкиРазрешитьОтгрузку</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+		<Command name="ПеречитатьДанные" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обновить</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Перечитать данные</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>StdPicture.Refresh</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>ПеречитатьДанные</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+	</Commands>
+</Form>
