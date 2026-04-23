@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcssch="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<AutoSaveDataInSettings>Use</AutoSaveDataInSettings>
+	<AutoTitle>false</AutoTitle>
+	<VerticalAlign>Top</VerticalAlign>
+	<VerticalScroll>useIfNecessary</VerticalScroll>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<ChildItems>
+			<Button name="ОписаниеРобота" id="43">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.ОткрытьОписаниеРобота</CommandName>
+				<Title>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Посмотреть описание обработки</v8:content>
+					</v8:item>
+				</Title>
+				<Shape>Oval</Shape>
+				<ShapeRepresentation>Always</ShapeRepresentation>
+				<ExtendedTooltip name="ОписаниеРоботаРасширеннаяПодсказка" id="44"/>
+			</Button>
+		</ChildItems>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnOpen">ПриОткрытии</Event>
+		<Event name="OnCreateAtServer">ПриСозданииНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<Button name="ОсновнаяПроцедура" id="45">
+			<Type>UsualButton</Type>
+			<CommandName>Form.Command.ОсновнаяПроцедура</CommandName>
+			<ExtendedTooltip name="ОсновнаяПроцедураРасширеннаяПодсказка" id="46"/>
+		</Button>
+		<LabelDecoration name="ВремяВыполнения" id="34">
+			<Title formatted="false">
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Время выполнения</v8:content>
+				</v8:item>
+			</Title>
+			<ContextMenu name="ВремяВыполненияКонтекстноеМеню" id="35"/>
+			<ExtendedTooltip name="ВремяВыполненияРасширеннаяПодсказка" id="36"/>
+		</LabelDecoration>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:ExternalDataProcessorObject.ПростейшийНеРобот</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="ОткрытьОписаниеРобота" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть описание робота</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть описание робота</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ОткрытьОписаниеРобота</Action>
+		</Command>
+		<Command name="ОсновнаяПроцедура" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Основная процедура</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Основная процедура</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ОсновнаяПроцедура</Action>
+		</Command>
+	</Commands>
+</Form>
