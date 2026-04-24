@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Локации и Окружение (Location Environment)
 
-В процессе работы необходимо учитывать текущую локацию пользователя, так как от этого зависят MCP-серверы, параметры сборки/запуска EPF и специфика работы с Git.
+В процессе работы необходимо учитывать текущую локацию пользователя, так как от этого зависят MCP-серверы, параметры сборки/запуска EPF/ERF и специфика работы с Git.
 
 Существуют две основные локации:
 1. **Работа** — путь проекта `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`
@@ -21,7 +21,7 @@ alwaysApply: true
 ## Что зависит от локации
 
 1. **MCP-серверы** — набор и конфигурация MCP-инструментов привязаны к локации.
-2. **Параметры сборки и запуска EPF** (путь к 1С, база, авторизация) — привязаны к локации.
+2. **Параметры сборки и запуска EPF/ERF** (путь к 1С, база, авторизация) — привязаны к локации.
 3. **Работа с Git** — оболочка, кодировка, синтаксис команд привязаны к локации.
 
 ## Важно: ExecutionPolicy
@@ -36,23 +36,35 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File <скрипт> <пара
 
 # Общие правила (все локации)
 
-## EPF: шаблоны и порядок создания
+## Режимы запуска 1С
 
-Шаблоны-прототипы обработок хранятся в `templates/epf/`:
-- `ПРОСТЕЙШИЙ НЕ РОБОТ.epf` — обработка без БСП-регистрации (по умолчанию)
-- `ПРОСТЕЙШИЙ РОБОТ.epf` — обработка с БСП-регистрацией (`СведенияОВнешнейОбработке`)
+| Режим | Ключ | Описание | Когда использовать |
+|-------|------|----------|--------------------|
+| **Обычный (Такси)** | *(без ключа)* | Современный интерфейс | По умолчанию для EPF |
+| **Ламповый (Ordinary)** | `/RunModeOrdinaryApplication` | Классический интерфейс | По запросу, для ERF-прототипа |
 
-**Правила выбора шаблона:**
-1. **По умолчанию** — `ПРОСТЕЙШИЙ НЕ РОБОТ.epf`.
-2. Если в запросе **явно указан** другой шаблон — использовать указанный.
-3. Если сказано **не использовать** шаблон — создавать через `epf-init` / `meta-compile`.
+**Правила:**
+- **EPF (обработки):** запускать в **обычном режиме** по умолчанию. Ламповый — только по явному запросу.
+- **ERF (отчёты):** **спрашивать режим** при каждом запуске. Прототип `ПУСТОЙ ОТЧЕТ С ОБВЯЗКОЙ.erf` работает только в ламповом режиме.
 
-**Порядок действий:**
-1. Распаковать шаблон через навык `epf-dump` во временную папку.
+## Шаблоны и порядок создания EPF/ERF
+
+Подробные правила выбора шаблонов см. в `epf-templates.mdc`. Кратко:
+
+**Обработки (EPF):** шаблоны в `templates/epf/`, по умолчанию `ПРОСТЕЙШИЙ НЕ РОБОТ.epf`.
+**Отчёты (ERF):** шаблоны в `templates/erf/`, по умолчанию `ПУСТОЙ ОТЧЕТ С ОБВЯЗКОЙ.erf`.
+
+**Порядок действий (единый для EPF и ERF):**
+1. Распаковать шаблон через навык `epf-dump` / `erf-dump` во временную папку.
 2. Модифицировать XML-исходники под задачу.
-3. Собрать обработку через навык `epf-build` с параметрами, зависящими от локации.
+3. Собрать через навык `epf-build` / `erf-build` с параметрами текущей локации.
 
-## EPF: структура проектов
+## Автозапуск EPF/ERF
+
+- **EPF (обработки):** автозапуск через `/Execute` — поддерживается.
+- **ERF (отчёты):** автозапуск через `/Execute` — **НЕ поддерживается** платформой 1С. После сборки сообщить путь к файлу, пользователь открывает вручную через «Файл → Открыть».
+
+## Структура проектов
 
 Все новые проекты создаются в `Projects/` с автонумерацией:
 ```
@@ -105,7 +117,7 @@ Projects/
 
 ## Параметры подключения к 1С (Работа)
 
-Эти параметры используются для сборки EPF (`epf-build`) и запуска 1С (`db-run`):
+Эти параметры используются для сборки EPF/ERF и запуска 1С:
 
 | Параметр | Значение |
 |----------|----------|
@@ -114,16 +126,34 @@ Projects/
 | **Пользователь (UserName)** | `Администратор` |
 | **Пароль (Password)** | *(без пароля — не указывать)* |
 
-### Сборка EPF — пример команды
+### Сборка обработки EPF
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МояОбработка.xml" -OutputFile "build/МояОбработка.epf"
 ```
 
-### Запуск обработки (db-run) — пример команды
+### Сборка отчёта ERF
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МойОтчёт.xml" -OutputFile "build/МойОтчёт.erf"
+```
+
+### Запуск обработки EPF — обычный режим (по умолчанию)
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/db-run/scripts/db-run.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -Execute "Projects/003 Hello World/HelloWorld.epf"
+```
+
+### Запуск 1С — ламповый режим
+
+```powershell
+Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /DisableStartupDialogs"
+```
+
+### Запуск обработки EPF — ламповый режим
+
+```powershell
+Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /Execute ""<путь_к_EPF>"" /DisableStartupDialogs"
 ```
 
 ## Работа с Git (Работа)
