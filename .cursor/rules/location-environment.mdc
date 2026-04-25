@@ -190,12 +190,84 @@ git status
 
 ## MCP-серверы (Дом)
 
-*(Настройки MCP-серверов для локации "Дом" будут добавлены позднее).*
+| # | Сервер | Транспорт | Описание |
+|---|--------|-----------|----------|
+| 1 | **1c-forms-mcp** | HTTP `:8011` | Управляемые формы 1С — генерация, валидация, конвертация |
+| 2 | **1c-templates** | HTTP `:8023` | Шаблоны кода 1С — `templatesearch`, `ssl_search` |
+| 3 | **trusted-gateway** | HTTP `:8767` | Проксирование запросов |
+| 4 | **1c-docs-mcp** | stdio (Node) | Документация платформы — `docsearch`, `docinfo` (Mini AI 1C) |
+| 5 | **1c-bsl-help** | stdio (cmd+Java JAR v0.3.2) | Документация платформы — `docsearch`, `docinfo`. Платформа: `C:\Program Files (x86)\1cv8\8.3.27.1786` |
+| 6 | **1c-ssl-mcp (1С:Напарник)** | stdio (Node) | 11 инструментов: check, review, rewrite, modify, ask_1c_ai, search_1c_documentation и др. |
+| 7 | **1c-syntax-checker-mcp** | stdio (Node) | `syntaxcheck` — BSL Language Server (через 1С:Напарник) |
+| 8 | **1c-metadata** | stdio (Node) | Метаданные конфигурации — `metadatasearch`, `get_metadata_details` |
+| 9 | **mcp-1c-search** | stdio (exe) | Поиск по коду 1С |
+| 10 | **rlm-search** | stdio (Python venv) | BSL поиск — `search_code`, `search_function`, `get_module_structure`, `get_method_call_hierarchy`, `graph_dependencies` |
+
+Автозапуск HTTP-серверов (1c-forms-mcp, 1c-templates, trusted-gateway) через `.cursor/start-mcp-workspace-services.ps1`.
 
 ## Параметры подключения к 1С (Дом)
 
-*(Настройки подключения для локации "Дом" будут добавлены позднее).*
+Эти параметры используются для сборки EPF/ERF и запуска 1С:
+
+| Параметр | Значение |
+|----------|----------|
+| **Путь к 1С (V8Path)** | `"C:\Program Files (x86)\1cv8\common\1cestart.exe"` |
+| **База (InfoBasePath)** | `"D:\С1\C1_ZERO_GIT"` |
+| **Пользователь (UserName)** | *(без пользователя — автовход)* |
+| **Пароль (Password)** | *(без пароля — не указывать)* |
+
+### Сборка обработки EPF
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -SourceFile "src/МояОбработка.xml" -OutputFile "build/МояОбработка.epf"
+```
+
+### Сборка отчёта ERF
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -SourceFile "src/МойОтчёт.xml" -OutputFile "build/МойОтчёт.erf"
+```
+
+### Запуск обработки EPF — обычный режим (по умолчанию)
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/db-run/scripts/db-run.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -Execute "Projects/003 Hello World/HelloWorld.epf"
+```
+
+### Запуск 1С — ламповый режим
+
+```powershell
+Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\С1\C1_ZERO_GIT"" /RunModeOrdinaryApplication /DisableStartupDialogs"
+```
+
+### Запуск обработки EPF — ламповый режим
+
+```powershell
+Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\С1\C1_ZERO_GIT"" /RunModeOrdinaryApplication /Execute ""<путь_к_EPF>"" /DisableStartupDialogs"
+```
 
 ## Работа с Git (Дом)
 
-*(Специфика Git для локации "Дом" будет добавлена позднее. Оболочка и синтаксис могут отличаться от PowerShell.)*
+Оболочка: **PowerShell** (Windows). Специфика PowerShell определяет синтаксис команд.
+
+**Важно (PowerShell):**
+- **НЕ использовать `&&`** — PowerShell не поддерживает. Разделять команды на отдельные вызовы Shell.
+- **НЕ использовать heredoc** `$(cat <<'EOF'...)` — не работает в PowerShell. Передавать сообщение через `-m "текст"` одной строкой.
+- Команды `git add`, `git commit`, `git push` выполнять **отдельными вызовами Shell**, не в одной строке через `;`.
+- Пути с кириллицей и пробелами брать в двойные кавычки.
+
+**Проверенные рабочие команды (Дом):**
+
+```powershell
+# Получение изменений
+git pull
+
+# Отправка изменений (каждая команда — отдельный вызов Shell)
+git status
+git diff
+git log --oneline -5
+git add <файлы>
+git commit -m "сообщение коммита"
+git push
+git status
+```

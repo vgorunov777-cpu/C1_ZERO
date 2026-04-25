@@ -17,6 +17,9 @@ test-tmp/
 # Инструменты (portable Apache и т.д.)
 tools/
 
+# MCP-серверы (локальные junction-ссылки)
+mcp-servers/
+
 # Отладка навыков (eval, trigger-test, run_loop результаты)
 debug/
 
@@ -52,3 +55,6 @@ __pycache__/
 
 # Cursor: содержимое отслеживается, но mcp.json с токенами — игнорируется
 .cursor/mcp.json
+
+# Cursor: путь к платформе 1С (локальный)
+.cursor/bsl-help-platform-path.txt
