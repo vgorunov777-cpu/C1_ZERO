@@ -1,186 +1,10 @@
 ---
-description: Environment and Location tracking (Home / Work) for launching 1C and external processors
-alwaysApply: true
+description: "Location Environment — параметры подключения к 1С, сборка EPF/ERF, запуск, MCP-серверы. Загружать при сборке/запуске 1С."
+alwaysApply: false
 ---
+# Location Environment
 
-# Локации и Окружение (Location Environment)
-
-В процессе работы необходимо учитывать текущую локацию пользователя, так как от этого зависят MCP-серверы, параметры сборки/запуска EPF/ERF и специфика работы с Git.
-
-Существуют две основные локации:
-1. **Работа** — путь проекта `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`
-2. **Дом** — любой другой путь проекта
-
-## Автоматическое определение локации
-
-- Локация определяется **автоматически по пути папки текущего проекта** (workspace root).
-- Если путь проекта = `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB` → **Работа**.
-- Во всех остальных случаях → **Дом**.
-- Спрашивать пользователя о локации **не нужно** — определяй самостоятельно.
-
-## Что зависит от локации
-
-1. **MCP-серверы** — набор и конфигурация MCP-инструментов привязаны к локации.
-2. **Параметры сборки и запуска EPF/ERF** (путь к 1С, база, авторизация) — привязаны к локации.
-3. **Работа с Git** — оболочка, кодировка, синтаксис команд привязаны к локации.
-
-## Важно: ExecutionPolicy
-
-При любом запуске `.ps1`-скриптов из навыков **обязательно** добавлять `-ExecutionPolicy Bypass`:
-```
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File <скрипт> <параметры>
-```
-Без этого параметра скрипты завершаются с ошибкой `UnauthorizedAccess` (Execution Policy).
-
----
-
-# Общие правила (все локации)
-
-## Режимы запуска 1С
-
-| Режим | Ключ | Описание | Когда использовать |
-|-------|------|----------|--------------------|
-| **Обычный (Такси)** | *(без ключа)* | Современный интерфейс | По умолчанию для EPF |
-| **Ламповый (Ordinary)** | `/RunModeOrdinaryApplication` | Классический интерфейс | По запросу, для ERF-прототипа |
-
-**Правила:**
-- **EPF (обработки):** запускать в **обычном режиме** по умолчанию. Ламповый — только по явному запросу.
-- **ERF (отчёты):** **спрашивать режим** при каждом запуске. Прототип `ПУСТОЙ ОТЧЕТ С ОБВЯЗКОЙ.erf` работает только в ламповом режиме.
-
-## Шаблоны и порядок создания EPF/ERF
-
-Подробные правила выбора шаблонов см. в `epf-templates.mdc`. Кратко:
-
-**Обработки (EPF):** шаблоны в `templates/epf/`, по умолчанию `ПРОСТЕЙШИЙ НЕ РОБОТ.epf`.
-**Отчёты (ERF):** шаблоны в `templates/erf/`, по умолчанию `ПУСТОЙ ОТЧЕТ С ОБВЯЗКОЙ.erf`.
-
-**Порядок действий (единый для EPF и ERF):**
-1. Распаковать шаблон через навык `epf-dump` / `erf-dump` во временную папку.
-2. Модифицировать XML-исходники под задачу.
-3. Собрать через навык `epf-build` / `erf-build` с параметрами текущей локации.
-
-## Автозапуск EPF/ERF
-
-- **EPF (обработки):** автозапуск через `/Execute` — поддерживается.
-- **ERF (отчёты):** автозапуск через `/Execute` — **НЕ поддерживается** платформой 1С. После сборки сообщить путь к файлу, пользователь открывает вручную через «Файл → Открыть».
-
-## Структура проектов
-
-Все новые проекты создаются в `Projects/` с автонумерацией:
-```
-Projects/
-  001 Название проекта/
-  002 Название проекта/
-  ...
-```
-- Определить максимальный номер, следующий = `максимум + 1`, формат 3 цифры (001–999).
-
-## Git: общий алгоритм
-
-При запросе «залей в гит», «обновись с гита», «закоммить», «запуш» и т.п. — выполнять без лишних вопросов.
-
-**Получение изменений (git pull):**
-1. `git pull` — получить и применить изменения
-2. `git status` — убедиться в чистоте
-
-**Отправка изменений (git push):**
-1. `git status` — посмотреть изменённые файлы
-2. `git diff` — посмотреть сами изменения
-3. `git log --oneline -5` — посмотреть стиль коммитов
-4. `git add <файлы>` — добавить нужные файлы (не добавлять логи: `mcp-server.log.*`, `*.gz`)
-5. `git commit -m "сообщение"`
-6. `git push`
-7. `git status` — убедиться что всё чисто
-
----
-
-# Локация: Работа
-
-> Путь проекта: `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`
-
-## MCP-серверы (Работа)
-
-Автозапуск через `.cursor/start-mcp-workspace-services.ps1`:
-
-| # | Сервер | Порт / Транспорт | Описание |
-|---|--------|-------------------|----------|
-| 1 | **1c-forms-mcp** | `:8011` (HTTP) | Управляемые формы 1С — генерация, валидация, конвертация |
-| 2 | **1c-templates** | `:8023` (HTTP) | Шаблоны кода 1С — `templatesearch`, `ssl_search` |
-| 3 | **1c-bsl-help** | `:8080` (SSE/Java JAR v0.3.2) | Документация платформы — `docsearch`, `docinfo`. Платформа: auto-detect из `Program Files\1cv8` или env `ONEC_BSL_HELP_PLATFORM_PATH` |
-| 4 | **rlm-bsl-search** | stdio (Python venv) | BSL поиск — `search_code`, `search_function`, `get_module_structure`, `get_method_call_hierarchy`, `graph_dependencies` |
-| 5 | **trusted-gateway** | `:8767` (если есть `tools\trusted-gateway`) | Проксирование запросов |
-| 6 | **1c-code-metadata-mcp** | (внешний) | 15 инструментов — метаданные, код, формы, XSD, валидация XML |
-| 7 | **1c-graph-metadata-mcp** | (внешний, Neo4j) | 16 инструментов — граф зависимостей, impact-анализ, BSL code search, семантика |
-| 8 | **1C-docs-mcp** | (внешний) | `docsearch`, `docinfo` — документация платформы |
-| 9 | **1c-syntax-checker-mcp** | (внешний) | `syntaxcheck` — BSL Language Server |
-| 10 | **1c-code-check-mcp (1С:Напарник)** | (внешний) | 11 инструментов: check, review, rewrite, modify, ask_1c_ai, search_1c_documentation, onec_help, its_help, fetch_its, diff_1c_documentation_versions, config_help |
-
-## Параметры подключения к 1С (Работа)
-
-Эти параметры используются для сборки EPF/ERF и запуска 1С:
-
-| Параметр | Значение |
-|----------|----------|
-| **Путь к 1С (V8Path)** | `"C:\Program Files (x86)\1cv8\common\1cestart.exe"` |
-| **База (InfoBasePath)** | `"D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"` |
-| **Пользователь (UserName)** | `Администратор` |
-| **Пароль (Password)** | *(без пароля — не указывать)* |
-
-### Сборка обработки EPF
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МояОбработка.xml" -OutputFile "build/МояОбработка.epf"
-```
-
-### Сборка отчёта ERF
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МойОтчёт.xml" -OutputFile "build/МойОтчёт.erf"
-```
-
-### Запуск обработки EPF — обычный режим (по умолчанию)
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/db-run/scripts/db-run.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -Execute "Projects/003 Hello World/HelloWorld.epf"
-```
-
-### Запуск 1С — ламповый режим
-
-```powershell
-Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /DisableStartupDialogs"
-```
-
-### Запуск обработки EPF — ламповый режим
-
-```powershell
-Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /Execute ""<путь_к_EPF>"" /DisableStartupDialogs"
-```
-
-## Работа с Git (Работа)
-
-Оболочка: **PowerShell** (Windows). Специфика PowerShell определяет синтаксис команд.
-
-**Важно (PowerShell):**
-- **НЕ использовать `&&`** — PowerShell не поддерживает. Разделять команды на отдельные вызовы Shell.
-- **НЕ использовать heredoc** `$(cat <<'EOF'...)` — не работает в PowerShell. Передавать сообщение через `-m "текст"` одной строкой.
-- Команды `git add`, `git commit`, `git push` выполнять **отдельными вызовами Shell**, не в одной строке через `;`.
-- Пути с кириллицей и пробелами брать в двойные кавычки.
-
-**Проверенные рабочие команды (Работа):**
-
-```powershell
-# Получение изменений
-git pull
-
-# Отправка изменений (каждая команда — отдельный вызов Shell)
-git status
-git diff
-git log --oneline -5
-git add <файлы>
-git commit -m "сообщение коммита"
-git push
-git status
-```
+Базовые правила локации (определение, ExecutionPolicy) — в `@rules/bootstrap.mdc`.
 
 ---
 
@@ -188,26 +12,7 @@ git status
 
 > Путь проекта: любой, кроме `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`
 
-## MCP-серверы (Дом)
-
-| # | Сервер | Транспорт | Описание |
-|---|--------|-----------|----------|
-| 1 | **1c-forms-mcp** | HTTP `:8011` | Управляемые формы 1С — генерация, валидация, конвертация |
-| 2 | **1c-templates** | HTTP `:8023` | Шаблоны кода 1С — `templatesearch`, `ssl_search` |
-| 3 | **trusted-gateway** | HTTP `:8767` | Проксирование запросов |
-| 4 | **1c-docs-mcp** | stdio (Node) | Документация платформы — `docsearch`, `docinfo` (Mini AI 1C) |
-| 5 | **1c-bsl-help** | stdio (cmd+Java JAR v0.3.2) | Документация платформы — `docsearch`, `docinfo`. Платформа: `C:\Program Files (x86)\1cv8\8.3.27.1786` |
-| 6 | **1c-ssl-mcp (1С:Напарник)** | stdio (Node) | 11 инструментов: check, review, rewrite, modify, ask_1c_ai, search_1c_documentation и др. |
-| 7 | **1c-syntax-checker-mcp** | stdio (Node) | `syntaxcheck` — BSL Language Server (через 1С:Напарник) |
-| 8 | **1c-metadata** | stdio (Node) | Метаданные конфигурации — `metadatasearch`, `get_metadata_details` |
-| 9 | **mcp-1c-search** | stdio (exe) | Поиск по коду 1С |
-| 10 | **rlm-search** | stdio (Python venv) | BSL поиск — `search_code`, `search_function`, `get_module_structure`, `get_method_call_hierarchy`, `graph_dependencies` |
-
-Автозапуск HTTP-серверов (1c-forms-mcp, 1c-templates, trusted-gateway) через `.cursor/start-mcp-workspace-services.ps1`.
-
 ## Параметры подключения к 1С (Дом)
-
-Эти параметры используются для сборки EPF/ERF и запуска 1С:
 
 | Параметр | Значение |
 |----------|----------|
@@ -246,28 +51,79 @@ Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "E
 Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\С1\C1_ZERO_GIT"" /RunModeOrdinaryApplication /Execute ""<путь_к_EPF>"" /DisableStartupDialogs"
 ```
 
-## Работа с Git (Дом)
+## MCP-серверы (Дом)
 
-Оболочка: **PowerShell** (Windows). Специфика PowerShell определяет синтаксис команд.
+| # | Сервер | Транспорт | Описание |
+|---|--------|-----------|----------|
+| 1 | **1c-forms-mcp** | HTTP `:8011` | Управляемые формы 1С — генерация, валидация, конвертация |
+| 2 | **1c-templates** | HTTP `:8023` | Шаблоны кода 1С — `templatesearch`, `ssl_search` |
+| 3 | **trusted-gateway** | HTTP `:8767` | Проксирование запросов |
+| 4 | **1c-docs-mcp** | stdio (Node) | Документация платформы — `docsearch`, `docinfo` |
+| 5 | **1c-bsl-help** | stdio (cmd+Java JAR v0.3.2) | Документация платформы — `docsearch`, `docinfo`. Платформа: `C:\Program Files (x86)\1cv8\8.3.27.1786` |
+| 6 | **1c-ssl-mcp (1С:Напарник)** | stdio (Node) | 11 инструментов: check, review, rewrite, modify, ask_1c_ai и др. |
+| 7 | **1c-syntax-checker-mcp** | stdio (Node) | `syntaxcheck` — BSL Language Server (через 1С:Напарник) |
+| 8 | **1c-metadata** | stdio (Node) | Метаданные конфигурации — `metadatasearch`, `get_metadata_details` |
+| 9 | **mcp-1c-search** | stdio (exe) | Поиск по коду 1С |
+| 10 | **rlm-search** | stdio (Python venv) | BSL поиск — `search_code`, `search_function`, `get_module_structure`, `get_method_call_hierarchy`, `graph_dependencies` |
 
-**Важно (PowerShell):**
-- **НЕ использовать `&&`** — PowerShell не поддерживает. Разделять команды на отдельные вызовы Shell.
-- **НЕ использовать heredoc** `$(cat <<'EOF'...)` — не работает в PowerShell. Передавать сообщение через `-m "текст"` одной строкой.
-- Команды `git add`, `git commit`, `git push` выполнять **отдельными вызовами Shell**, не в одной строке через `;`.
-- Пути с кириллицей и пробелами брать в двойные кавычки.
+Автозапуск HTTP-серверов (1c-forms-mcp, 1c-templates, trusted-gateway) через `.cursor/start-mcp-workspace-services.ps1`.
 
-**Проверенные рабочие команды (Дом):**
+---
+
+# Локация: Работа
+
+> Путь проекта: `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`
+
+## Параметры подключения к 1С (Работа)
+
+| Параметр | Значение |
+|----------|----------|
+| **Путь к 1С (V8Path)** | `"C:\Program Files (x86)\1cv8\common\1cestart.exe"` |
+| **База (InfoBasePath)** | `"D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"` |
+| **Пользователь (UserName)** | `Администратор` |
+| **Пароль (Password)** | *(без пароля — не указывать)* |
+
+### Сборка обработки EPF
 
 ```powershell
-# Получение изменений
-git pull
-
-# Отправка изменений (каждая команда — отдельный вызов Shell)
-git status
-git diff
-git log --oneline -5
-git add <файлы>
-git commit -m "сообщение коммита"
-git push
-git status
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МояОбработка.xml" -OutputFile "build/МояОбработка.epf"
 ```
+
+### Сборка отчёта ERF
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МойОтчёт.xml" -OutputFile "build/МойОтчёт.erf"
+```
+
+### Запуск обработки EPF — обычный режим (по умолчанию)
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/db-run/scripts/db-run.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -Execute "Projects/003 Hello World/HelloWorld.epf"
+```
+
+### Запуск 1С — ламповый режим
+
+```powershell
+Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /DisableStartupDialogs"
+```
+
+### Запуск обработки EPF — ламповый режим
+
+```powershell
+Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /Execute ""<путь_к_EPF>"" /DisableStartupDialogs"
+```
+
+## MCP-серверы (Работа)
+
+| # | Сервер | Порт / Транспорт | Описание |
+|---|--------|-------------------|----------|
+| 1 | **1c-forms-mcp** | `:8011` (HTTP) | Управляемые формы 1С — генерация, валидация, конвертация |
+| 2 | **1c-templates** | `:8023` (HTTP) | Шаблоны кода 1С — `templatesearch`, `ssl_search` |
+| 3 | **1c-bsl-help** | `:8080` (SSE/Java JAR v0.3.2) | Документация платформы — `docsearch`, `docinfo` |
+| 4 | **rlm-bsl-search** | stdio (Python venv) | BSL поиск — `search_code`, `search_function`, `get_module_structure`, `get_method_call_hierarchy`, `graph_dependencies` |
+| 5 | **trusted-gateway** | `:8767` (если есть `tools\trusted-gateway`) | Проксирование запросов |
+| 6 | **1c-code-metadata-mcp** | (внешний) | 15 инструментов — метаданные, код, формы, XSD, валидация XML |
+| 7 | **1c-graph-metadata-mcp** | (внешний, Neo4j) | 16 инструментов — граф зависимостей, impact-анализ, BSL code search, семантика |
+| 8 | **1C-docs-mcp** | (внешний) | `docsearch`, `docinfo` — документация платформы |
+| 9 | **1c-syntax-checker-mcp** | (внешний) | `syntaxcheck` — BSL Language Server |
+| 10 | **1c-code-check-mcp (1С:Напарник)** | (внешний) | 11 инструментов: check, review, rewrite, modify, ask_1c_ai и др. |

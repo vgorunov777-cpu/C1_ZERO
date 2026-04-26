@@ -1,0 +1,73 @@
+---
+description: "Fallback — справочник MCP-инструментов. Загружать ТОЛЬКО если MCP-инструменты недоступны (вызов возвращает ошибку). Если MCP доступны — НЕ загружать."
+alwaysApply: false
+---
+# MCP Tools Fallback Reference
+
+> **Загружать только если MCP-инструменты недоступны.** Если вызов MCP проходит успешно — этот файл не нужен, все описания доступны через tool descriptors.
+
+## Tool Priority: graph → code-metadata → Grep
+
+1. **graph-metadata** (1c-graph-metadata-mcp) — предпочтительно. Рекурсивные обходы, семантика, паспорта объектов
+2. **code-metadata** (1c-code-metadata-mcp) — фоллбэк. Прямой текстовый поиск
+3. **Grep/rg** — абсолютный последний Resort
+
+## Documentation Search
+
+| Tool | Purpose | When |
+|------|---------|------|
+| **docinfo** | Точный поиск по имени (`"ТаблицаЗначений"`, `"Массив.Найти"`) | Знаешь точное имя |
+| **docsearch** | Поиск по описанию (векторный + BM25) | Не знаешь точное имя |
+
+## Code Templates & SSL
+
+| Tool | Purpose | When |
+|------|---------|------|
+| **templatesearch** | Поиск шаблонов кода (2000+ шаблонов) | Перед написанием кода |
+| **ssl_search** | Поиск функций БСП (SSL) | Использовать БСП где уместно |
+
+## Metadata Search
+
+| Tool | Purpose | When |
+|------|---------|------|
+| **metadatasearch** | Семантический/FTS поиск по XML метаданных | Поиск объектов, проверка существования |
+| **get_metadata_details** | Полная структура: реквизиты, ТЧ, синонимы, типы | Знаешь имя объекта |
+| **search_metadata** | Cypher/JSON запросы к Neo4j | Графовые запросы (предпочтительно) |
+| **get_object_dossier** | Полный паспорт: структура+формы+deps+code+roles | Первый шаг при анализе объекта |
+
+## Code Search & Navigation
+
+| Graph (preferred) | Code-metadata (fallback) | Purpose |
+|-------------------|--------------------------|---------|
+| **search_code** (semantic+fulltext+hybrid, L0–L3) | **codesearch** | Поиск кода |
+| **trace_call_chain** (recursive depth 1–10) | **get_method_call_hierarchy** | Цепочки вызовов |
+| **trace_impact** (recursive USED_IN+CALLS) | **graph_dependencies** | Impact-анализ |
+| **find_objects_using_object** / **find_usages_of_object** | **graph_dependencies** (reverse) | Где используется объект |
+| — | **search_function** | Найти процедуру/функцию по имени |
+| — | **get_module_structure** | Структура модуля перед редактированием |
+| — | **bsl_scope_members** | Доступные методы/свойства контекста |
+
+## 1CCodeChecker (1С:Напарник)
+
+| Tool | Purpose |
+|------|---------|
+| **check_1c_code** | Техническая проверка: синтаксис, логика, производительность |
+| **review_1c_code** | Ревью: стиль, стандарты ITS, именование |
+| **rewrite_1c_code** | AI-переписывание (goal: `optimize`, `readability`, `error handling`) |
+| **modify_1c_code** | Целевая модификация кода |
+| **ask_1c_ai** | Вопросы 1С:Напарнику |
+| **search_1c_documentation** | Документация платформы по версии |
+| **onec_help** | Быстрый поиск в документации |
+| **its_help** → **fetch_its** | Стандарты ITS (всегда читать полный текст по ID) |
+| **diff_1c_documentation_versions** | Сравнение версий документации |
+| **config_help** | Документация по конфигурациям (ERP, БП, ЗУП, УТ) |
+| **syntaxcheck** | BSL Language Server (макс. 3 раза за цикл) |
+
+## Forms
+
+| Tool | Purpose |
+|------|---------|
+| **search_forms** | Поиск форм в конфигурации |
+| **inspect_form_layout** | Полная структура формы: элементы, привязки, команды, события |
+| **get_xsd_schema** | XSD-схема для типа метаданных |
+| **verify_xml** | Валидация XML по XSD |
