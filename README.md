@@ -2,71 +2,60 @@
 
 Проект для разработки на платформе 1С:Предприятие 8.3 с использованием Cursor IDE.
 
+## Архитектура и оптимизация токенов (Новая логика)
+
+Проект использует оптимизированную систему загрузки контекста (правил) Cursor, чтобы минимизировать расход токенов LLM при каждом запросе.
+
+Вместо загрузки всех правил постоянно (`alwaysApply: true`), проект опирается на один загрузочный файл:
+- **`bootstrap.mdc`** — единственное правило, загружаемое всегда. Содержит ядро: профиль разработчика, стандарты форматирования, алгоритм определения локации и проверку доступности MCP-инструментов.
+
+Все остальные правила загружаются **по требованию (on-demand)**:
+- `mcp-fallback-tools.mdc` — справочник MCP-инструментов. Загружается *только* в случае, если основные MCP-серверы недоступны (упали или не запущены).
+- `project_rules.mdc` — углубленные стандарты написания BSL-кода, работа с запросами и производительностью. Загружается при непосредственном написании кода.
+- `location-environment.mdc` — параметры баз данных и особенности Git/PowerShell в зависимости от локации. Загружается при запуске скриптов сборки (EPF/ERF) или тестирования.
+- `epf-templates.mdc` — логика выбора шаблонов по умолчанию (НЕРОБОТ для обработок, ПУСТОЙ ОТЧЕТ С ОБВЯЗКОЙ для отчетов) и автонумерация папок в `Projects/`.
+
+## Локации (Дом / Работа)
+
+Проект обладает контекстной осведомленностью о рабочем окружении (Локации). Локация определяется автоматически по пути к папке проекта:
+- **Работа:** (путь `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`). Используются рабочие серверные параметры 1С и расширенный набор MCP.
+- **Дом:** (любой другой путь). Используется файловая база данных и ограниченный локальный набор MCP.
+
+## Автозапуск MCP-серверов
+
+Для локальных HTTP MCP-серверов настроен автоматический фоновый запуск при открытии проекта:
+- Применяется VS Code Task (`.vscode/tasks.json` с триггером `runOn: folderOpen`).
+- Скрипт `.cursor/ensure-mcp-services.ps1` ожидает 60 секунд после запуска IDE, проверяет порты `8011` (`1c-forms-mcp`) и `8023` (`1c-templates`), и если они свободны — запускает сервисы в фоне.
+
 ## Структура проекта
 
 ```
 C1_ZERO/
+├── .vscode/                  # Настройки IDE (tasks.json для автозапуска MCP)
 ├── .cursor/                  # Правила и конфигурации Cursor
-│   ├── agents/               # 12 AI-агентов (developer, architect, tester, ...)
-│   ├── rules/                # 15 правил разработки на 1С (.mdc)
-│   ├── skills/               # 71 навык (64 из cc-1c-skills + 7 из cursor_rules_1c)
-│   ├── commands/             # Команды (deploy_and_test, getconfigfiles)
-│   ├── mcp.json              # MCP-серверы (локально, не в Git)
-│   └── README.md             # Документация правил
-├── Projects/                 # Проекты обработок и отчётов
-├── docs/                     # Спецификации и руководства (34 документа)
-├── scripts/                  # Скрипты автоматизации (switch.py и др.)
+│   ├── agents/               # AI-агенты (developer, architect, tester, ...)
+│   ├── rules/                # Правила разработки на 1С (bootstrap.mdc и on-demand *.mdc)
+│   ├── skills/               # Навыки (обертки над PowerShell)
+│   ├── commands/             # Команды Cursor
+│   ├── mcp.json              # Регистрация MCP-серверов
+│   ├── ensure-mcp-services.ps1 # Скрипт автозапуска MCP
+│   └── README.md             # Документация по агентам
+├── Projects/                 # Проекты обработок и отчётов (автонумерация 001-999)
+├── docs/                     # Спецификации и руководства
+├── scripts/                  # Скрипты автоматизации
 ├── tests/                    # Тесты
-├── .cursorrules              # Глобальные правила Cursor
+├── tools/                    # Исходники локальных MCP-серверов (1c-formsserver, и др.)
+├── .cursorrules              # Глобальные правила
 └── README.md                 # Этот файл
 ```
 
-## Правила и агенты Cursor
-
-Правила разработки взяты из репозитория [cursor_rules_1c](https://github.com/vgorunov777-cpu/cursor_rules_1c) (форк [comol/cursor_rules_1c](https://github.com/comol/cursor_rules_1c)).
-
-Полная документация по правилам, агентам и MCP-инструментам: [.cursor/README.md](.cursor/README.md).
-
 ## Навыки (Skills)
 
-Навыки из двух репозиториев объединены в `.cursor/skills/`:
-
-### cursor_rules_1c — диспетчерский навык и утилиты
-
-| Навык | Описание |
-|---|---|
-| `1c-metadata-manage` | Диспетчерский навык: 17 доменов, 30+ PowerShell-инструментов |
-| `img-grid-analysis` | Наложение сетки на изображение для анализа пропорций |
-| `mermaid-diagrams` | Создание Mermaid-диаграмм |
-| `powershell-windows` | Правила работы с PowerShell на Windows |
-
-### cc-1c-skills — 64 специализированных навыка
-
-Из репозитория [cc-1c-skills](https://github.com/vgorunov777-cpu/cc-1c-skills) (форк [Nikolay-Shirokov/cc-1c-skills](https://github.com/Nikolay-Shirokov/cc-1c-skills)):
-
-| Группа | Навыки | Описание |
-|---|---|---|
-| EPF (7) | `epf-init`, `epf-add-form`, `epf-build`, `epf-dump`, `epf-validate`, `epf-bsp-init`, `epf-bsp-add-command` | Внешние обработки |
-| ERF (4) | `erf-init`, `erf-build`, `erf-dump`, `erf-validate` | Внешние отчёты |
-| MXL (4) | `mxl-info`, `mxl-validate`, `mxl-compile`, `mxl-decompile` | Табличные документы |
-| Form (6) | `form-info`, `form-compile`, `form-validate`, `form-edit`, `form-patterns`, `form-add` | Управляемые формы |
-| Role (3) | `role-info`, `role-compile`, `role-validate` | Роли и права |
-| SKD (4) | `skd-info`, `skd-compile`, `skd-edit`, `skd-validate` | Схемы компоновки |
-| Meta (5) | `meta-info`, `meta-compile`, `meta-edit`, `meta-remove`, `meta-validate` | Метаданные (23 типа) |
-| CF (4) | `cf-info`, `cf-init`, `cf-edit`, `cf-validate` | Конфигурация |
-| CFE (5) | `cfe-init`, `cfe-borrow`, `cfe-patch-method`, `cfe-validate`, `cfe-diff` | Расширения |
-| Subsystem (4) | `subsystem-info`, `subsystem-compile`, `subsystem-edit`, `subsystem-validate` | Подсистемы |
-| Interface (2) | `interface-edit`, `interface-validate` | Командный интерфейс |
-| DB (9) | `db-list`, `db-create`, `db-dump-cf`, `db-load-cf`, `db-dump-xml`, `db-load-xml`, `db-update`, `db-run`, `db-load-git` | Базы данных |
-| Web (4) | `web-publish`, `web-info`, `web-stop`, `web-unpublish` | Веб-публикация |
-| Web Test (1) | `web-test` | Тестирование через веб-клиент |
-| Утилиты (2) | `img-grid`, `template-add/remove`, `help-add`, `form-remove` | Универсальные операции |
-
-Документация по навыкам: [docs/](docs/) — гайды, спецификации, DSL.
-
-## MCP-серверы
-
-Для работы AI-агентов требуются MCP-серверы. Настройки хранятся локально в `.cursor/mcp.json` (не коммитируются).
+Навыки объединены в `.cursor/skills/` и предоставляют агентам возможность исполнять PowerShell-скрипты для работы с 1С:
+- **`1c-metadata-manage`**: Диспетчерский навык (17 доменов, 30+ инструментов).
+- **EPF/ERF**: Сборка, декомпиляция, валидация (`epf-build`, `erf-build`, `epf-dump` и др.).
+- **Метаданные**: Работа с формами, макетами MXL, ролями, СКД, подсистемами, расширениями (CFE).
+- **Базы данных**: Дампы конфигураций (`db-dump-xml`, `db-load-xml`), обновление БД (`db-update`), запуск 1С (`db-run`).
 
 ## Лицензия
 
