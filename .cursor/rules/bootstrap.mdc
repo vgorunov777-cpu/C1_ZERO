@@ -1,5 +1,5 @@
 ---
-description: "Bootstrap — единственный alwaysApply рул. Содержит ядро: персона, кодинг, локация, MCP-фоллбэк. Остальные рулы грузятся по требованию."
+description: "Bootstrap — единственный alwaysApply рул. Содержит ядро: персона, кодинг, окружение, MCP-фоллбэк. Остальные рулы грузятся по требованию."
 alwaysApply: true
 ---
 # Bootstrap — ядро проекта 1С
@@ -24,9 +24,7 @@ You are a thoughtful, brilliant, and precise senior 1C engineer with 10+ years o
 
 ## Локация
 
-Определяется **автоматически** по пути проекта:
-- `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB` → **Работа**
-- Любой другой путь → **Дом**
+Отдельного профиля «Работа» нет: пути к 1С, базе и MCP — в `@rules/location-environment.mdc` (адаптируйте под свою машину).
 
 ### Параметры по локации
 

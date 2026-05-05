@@ -4,15 +4,15 @@ alwaysApply: false
 ---
 # Location Environment
 
-Базовые правила локации (определение, ExecutionPolicy) — в `@rules/bootstrap.mdc`.
+Правила запуска скриптов (ExecutionPolicy) — в `@rules/bootstrap.mdc`.
 
 ---
 
-# Локация: Дом
+# Параметры окружения (1С, EPF/ERF, MCP)
 
-> Путь проекта: любой, кроме `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`
+> Пример путей для одной машины; при необходимости замените на свои.
 
-## Параметры подключения к 1С (Дом)
+## Параметры подключения к 1С
 
 | Параметр | Значение |
 |----------|----------|
@@ -51,7 +51,7 @@ Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "E
 Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\С1\C1_ZERO_GIT"" /RunModeOrdinaryApplication /Execute ""<путь_к_EPF>"" /DisableStartupDialogs"
 ```
 
-## MCP-серверы (Дом)
+## MCP-серверы
 
 | # | Сервер | Транспорт | Описание |
 |---|--------|-----------|----------|
@@ -65,65 +65,6 @@ Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "E
 | 8 | **1c-metadata** | stdio (Node) | Метаданные конфигурации — `metadatasearch`, `get_metadata_details` |
 | 9 | **mcp-1c-search** | stdio (exe) | Поиск по коду 1С |
 | 10 | **rlm-search** | stdio (Python venv) | BSL поиск — `search_code`, `search_function`, `get_module_structure`, `get_method_call_hierarchy`, `graph_dependencies` |
+| 11 | **v8std** | HTTP `https://ai.v8std.ru/mcp` | Стандарты разработки 1С (v8std.ru) — поиск и пояснение правил |
 
 Автозапуск HTTP-серверов (1c-forms-mcp, 1c-templates, trusted-gateway) через `.cursor/start-mcp-workspace-services.ps1`.
-
----
-
-# Локация: Работа
-
-> Путь проекта: `D:\Users\va.goryunov\CURSOR\ZERO_1C_GITHUB`
-
-## Параметры подключения к 1С (Работа)
-
-| Параметр | Значение |
-|----------|----------|
-| **Путь к 1С (V8Path)** | `"C:\Program Files (x86)\1cv8\common\1cestart.exe"` |
-| **База (InfoBasePath)** | `"D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"` |
-| **Пользователь (UserName)** | `Администратор` |
-| **Пароль (Password)** | *(без пароля — не указывать)* |
-
-### Сборка обработки EPF
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МояОбработка.xml" -OutputFile "build/МояОбработка.epf"
-```
-
-### Сборка отчёта ERF
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -SourceFile "src/МойОтчёт.xml" -OutputFile "build/МойОтчёт.erf"
-```
-
-### Запуск обработки EPF — обычный режим (по умолчанию)
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/db-run/scripts/db-run.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO" -UserName "Администратор" -Execute "Projects/003 Hello World/HelloWorld.epf"
-```
-
-### Запуск 1С — ламповый режим
-
-```powershell
-Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /DisableStartupDialogs"
-```
-
-### Запуск обработки EPF — ламповый режим
-
-```powershell
-Start-Process "C:\Program Files (x86)\1cv8\common\1cestart.exe" -ArgumentList "ENTERPRISE /F ""D:\Users\va.goryunov\CURSOR\ZERO_1C\AI_DEMO"" /N""Администратор"" /RunModeOrdinaryApplication /Execute ""<путь_к_EPF>"" /DisableStartupDialogs"
-```
-
-## MCP-серверы (Работа)
-
-| # | Сервер | Порт / Транспорт | Описание |
-|---|--------|-------------------|----------|
-| 1 | **1c-forms-mcp** | `:8011` (HTTP) | Управляемые формы 1С — генерация, валидация, конвертация |
-| 2 | **1c-templates** | `:8023` (HTTP) | Шаблоны кода 1С — `templatesearch`, `ssl_search` |
-| 3 | **1c-bsl-help** | `:8080` (SSE/Java JAR v0.3.2) | Документация платформы — `docsearch`, `docinfo` |
-| 4 | **rlm-bsl-search** | stdio (Python venv) | BSL поиск — `search_code`, `search_function`, `get_module_structure`, `get_method_call_hierarchy`, `graph_dependencies` |
-| 5 | **trusted-gateway** | `:8767` (если есть `tools\trusted-gateway`) | Проксирование запросов |
-| 6 | **1c-code-metadata-mcp** | (внешний) | 15 инструментов — метаданные, код, формы, XSD, валидация XML |
-| 7 | **1c-graph-metadata-mcp** | (внешний, Neo4j) | 16 инструментов — граф зависимостей, impact-анализ, BSL code search, семантика |
-| 8 | **1C-docs-mcp** | (внешний) | `docsearch`, `docinfo` — документация платформы |
-| 9 | **1c-syntax-checker-mcp** | (внешний) | `syntaxcheck` — BSL Language Server |
-| 10 | **1c-code-check-mcp (1С:Напарник)** | (внешний) | 11 инструментов: check, review, rewrite, modify, ask_1c_ai и др. |

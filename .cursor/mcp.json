@@ -1,0 +1,60 @@
+{
+  "mcpServers": {
+    "1c-forms-mcp": {
+      "type": "http",
+      "url": "http://localhost:8011/mcp"
+    },
+    "1c-templates": {
+      "type": "http",
+      "url": "http://localhost:8023/mcp"
+    },
+    "trusted-gateway": {
+      "type": "http",
+      "url": "http://localhost:8767/mcp"
+    },
+    "1c-docs-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["C:\\Program Files\\Mini AI 1C\\mcp-servers\\1c-help.cjs"]
+    },
+    "1c-bsl-help": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": ["/c", "D:\\0_CURSOR_PROJECTS\\C1_ZERO_GIT\\tools\\1c-bsl-help\\run-bsl-mcp.cmd"]
+    },
+    "1c-ssl-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["C:\\Program Files\\Mini AI 1C\\mcp-servers\\1c-naparnik.cjs"],
+      "env": {
+        "ONEC_AI_TOKEN": ""
+      }
+    },
+    "1c-syntax-checker-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["C:\\Program Files\\Mini AI 1C\\mcp-servers\\1c-naparnik.cjs"],
+      "env": {
+        "ONEC_AI_TOKEN": ""
+      }
+    },
+    "1c-metadata": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["C:\\Program Files\\Mini AI 1C\\mcp-servers\\1c-metadata.cjs"]
+    },
+    "mcp-1c-search": {
+      "type": "stdio",
+      "command": "D:\\0_CURSOR_PROJECTS\\C1_ZERO_GIT\\mcp-servers\\mcp-1c-search.exe"
+    },
+    "rlm-search": {
+      "type": "stdio",
+      "command": "D:\\0_CURSOR_PROJECTS\\C1_ZERO_GIT\\tools\\rlm-bsl-search\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "rlm_tools_bsl"]
+    },
+    "v8std": {
+      "type": "http",
+      "url": "https://ai.v8std.ru/mcp"
+    }
+  }
+}

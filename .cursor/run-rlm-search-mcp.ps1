@@ -43,4 +43,4 @@ if (-not (Test-Path -LiteralPath $venvPy)) {
 	& $pip install -e $rlmRoot
 }
 
-& $venvPy -m rlm_bsl_search
+& $venvPy -m rlm_tools_bsl
