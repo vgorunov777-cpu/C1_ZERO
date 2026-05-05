@@ -1,0 +1,154 @@
+# Хелперы песочницы
+
+Хелперы — это функции, доступные AI-агенту внутри сессии `rlm_execute`. Они составляют публичный интерфейс песочницы: агент пишет Python-код, вызывающий хелперы, и получает структурированные результаты. Хелперы инкапсулируют навигацию по файлам, парсинг BSL, анализ метаданных — всё, что нужно для исследования кодовой базы 1С. Агент не работает с файлами напрямую — он работает через хелперы, которые возвращают компактные словари вместо сырых данных.
+
+## Навигация и подсказки
+
+- `help(task)` — маршрутизатор рецептов. Вызов `help()` показывает все доступные рецепты, `help('find exports')` или `help('граф вызовов')` — конкретный рецепт с готовым Python-кодом для копирования в `rlm_execute`. Помогает слабым моделям быстро найти нужный паттерн работы
+
+## Стандартные (из rlm-tools)
+
+- `read_file(path)`, `read_files(paths)` — чтение файлов (кэшируется между вызовами; в MCP-сессии: с номерами строк `42 | код`)
+- `grep(pattern, path)`, `grep_summary(pattern)`, `grep_read(pattern, path, max_files, context_lines)` — поиск по содержимому (grep_read совмещает поиск и чтение с контекстом в одном вызове)
+- `glob_files(pattern)` — поиск файлов по маске. **При наличии SQLite-индекса** — мгновенный ответ из таблицы `file_paths` для поддерживаемых паттернов (`**/*.ext`, `Dir/**/*.ext`, `Dir/**`, `Dir/*/File.ext`, `**/Dir/**/*.ext`, `**/Name.ext`, точные пути). Остальные паттерны → fallback на `pathlib.Path.glob()`
+- `tree(path, max_depth)` — дерево каталогов. **При наличии SQLite-индекса** — мгновенное построение из `file_paths` (без обхода FS)
+- `find_files(name, limit)` — поиск файлов по подстроке имени. **При наличии SQLite-индекса** — мгновенный ответ с ранжированием: точное совпадение имени > префикс > подстрока имени > подстрока пути
+
+## BSL-специфичные (добавлены в rlm-tools-bsl)
+
+- `find_module(name)` — найти модули объекта по имени (например, `find_module("Номенклатура")` вернёт пути к ObjectModule, ManagerModule, FormModule)
+- `find_by_type(category)` — все объекты категории. Принимает как каноничные имена папок (`"InformationRegisters"`, `"Documents"`), так и сокращённые/единственное число (`"InformationRegister"`, `"Document"`) и русские (`"РегистрСведений"`, `"Документ"`, `"Справочник"`)
+- `extract_procedures(path)` — извлечь сигнатуры всех Процедур/Функций из BSL-файла
+- `find_exports(path)` — только экспортные процедуры
+- `read_procedure(path, name)` — прочитать тело конкретной процедуры (абсолютные номера строк)
+- `find_callers(name)` — найти все вызовы процедуры/функции по кодовой базе (делегирует в `find_callers_context`)
+- `find_callers_context(proc_name, module_hint, offset, limit)` — найти вызывающих с полным контекстом: имя вызывающей процедуры, флаг экспорта, категория и имя объекта, тип модуля. Фильтрует комментарии и строковые литералы. Поддерживает пагинацию. Оптимизации: (1) параллельная фильтрация всех BSL-файлов через `ThreadPoolExecutor` — сканируется вся конфигурация без ограничений, на 23K файлов ~7-15 секунд; (2) результаты фильтрации кэшируются в рамках сессии — повторные вызовы мгновенны
+- `safe_grep(pattern, name_hint, max_files)` — параллельный grep по BSL-файлам через `ThreadPoolExecutor(max_workers=8)`. Результаты детерминированно отсортированы по `(file, line)`. Безопасен на больших конфигурациях — ограничен `max_files`
+- `parse_object_xml(path)` — парсинг XML метаданных 1С: реквизиты, табличные части, ресурсы, измерения, состав подсистемы. Поддерживает оба формата: CF и MDO (EDT)
+- `parse_form(object_name, form_name='', handler='')` — парсинг XML форм 1С: обработчики событий (scope: form/ext_info/element), команды формы (command→action), атрибуты (DynamicList, mainTable, queryText). Grouped output по формам с `module_path` для перехода к BSL-модулю. Обратный поиск: `handler='ПроцИмя'` находит привязку процедуры к элементу/событию. Поддержка CommonForms. При наличии SQLite-индекса (v10+) — мгновенный ответ из таблицы `form_elements`
+- `analyze_subsystem(name)` — найти подсистему по имени или по содержимому (обратный поиск: какие подсистемы содержат данный объект). При наличии SQLite-индекса — мгновенный ответ из нормализованной таблицы `subsystem_content`. Без индекса — glob + XML-парсинг
+- `find_custom_modifications(object_name, custom_prefixes=None)` — найти все нетиповые доработки в модулях объекта: процедуры с нетиповым префиксом, нетиповые `#Область`, нетиповые реквизиты в XML. Префиксы авто-определяются из кодовой базы (порог 3 для основной конфигурации, 1 для расширений). В ответе — `prefix_source` (user/auto), `prefixes_used`, диагностическое поле `parse_error` при ошибке парсинга XML. Поддерживает EDT-формат `.mdo` (авто-резолв `{path}/{Name}.mdo`)
+- `find_attributes(name='', object_name='', category='', kind='')` — поиск реквизитов, измерений, ресурсов и колонок ТЧ по имени, объекту или категории. **При наличии SQLite-индекса v11+** — мгновенный ответ из таблицы `object_attributes`. Без индекса — live XML-парсинг. Возвращает object_name, category, attr_name, attr_synonym, attr_type (JSON-массив типов), attr_kind (attribute/dimension/resource/column), ts_name
+- `find_predefined(name='', object_name='')` — поиск предопределённых элементов справочников, ПВХ, планов счетов. **При наличии SQLite-индекса v11+** — мгновенный ответ из таблицы `predefined_items`. Без индекса — live XML-парсинг (CF: Predefined.xml, EDT: .mdo). Возвращает object_name, category, item_name, item_synonym, types, item_code
+- `analyze_object(name)` — комплексный профиль объекта за один вызов: XML-метаданные (реквизиты, ТЧ, измерения) + все модули + процедуры + экспорты
+- `find_event_subscriptions(object_name, custom_only=False)` — подписки на события (что срабатывает при записи/проведении). Фильтрация по имени объекта, включая catch-all подписки (source_count=0). `custom_only=True` — только нетиповые (по авто-определённым префиксам)
+- `find_scheduled_jobs(name)` — регламентные (фоновые) задания, поиск по имени
+- `find_register_movements(document_name)` — какие регистры двигает документ при проведении. При наличии SQLite-индекса — мгновенный ответ из таблицы `register_movements`. Без индекса — ищет прямые `Движения.X` в ObjectModule + автоматический fallback на фреймворк проведения ERP (учетные механизмы, таблицы менеджера, адаптированные регистры из ManagerModule)
+- `find_register_writers(register_name)` — какие документы пишут в указанный регистр. При наличии SQLite-индекса — мгновенный ответ. Без индекса — параллельный поиск по всем ObjectModule
+- `analyze_document_flow(document_name)` — полный жизненный цикл документа за один вызов: метаданные + подписки + движения регистров + связанные рег. задания
+- `find_based_on_documents(document_name)` — ввод на основании: какие документы можно создать из этого (`ДобавитьКомандыСозданияНаОсновании`) и на основании чего можно создать его (`ОбработкаЗаполнения`)
+- `find_print_forms(object_name)` — печатные формы объекта из `ДобавитьКомандыПечати` в ManagerModule. Распознаёт оба паттерна регистрации: helper-style (`ДобавитьКомандуПечати(КП, "Ид", НСтр(...))`) и property-style ERP 2.x (`КомандаПечати.Идентификатор = "Ид"`), с дедупликацией
+- `find_functional_options(object_name)` — функциональные опции, влияющие на объект: из XML метаданных + вызовы `ПолучитьФункциональнуюОпцию()` в коде
+- `find_roles(object_name)` — роли с правами на объект. При наличии SQLite-индекса — мгновенный ответ из нормализованной таблицы `role_rights`. Без индекса — парсинг Rights.xml / .rights через `parse_rights_xml`, только granted-права
+- `find_enum_values(enum_name)` — значения перечисления с синонимами. При наличии SQLite-индекса — мгновенный ответ из таблицы `enum_values`. Без индекса — glob + XML-парсинг
+- `extract_queries(path)` — извлечение встроенных запросов 1С из BSL-модуля: парсит `Запрос.Текст = "..."` и многострочные `|`-тексты, определяет таблицы (`ИЗ РегистрНакопления.X`, `СОЕДИНЕНИЕ Справочник.Y`) и процедуру-владельца запроса
+- `code_metrics(path)` — метрики BSL-модуля: общее число строк, строк кода/комментариев/пустых, число процедур и экспортных, средний размер процедуры, максимальная вложенность (`Если/Для/Пока`)
+- `search(query, scope='all', limit=30)` — универсальный broad-first поиск: методы, объекты (синонимы), области, заголовки модулей, реквизиты, предопределённые. Fan-out по `search_methods`, `search_objects`, `search_regions`, `search_module_headers`, `find_attributes`, `find_predefined` с per-source квотой. Scope: `"all"`, `"methods"`, `"objects"`, `"regions"`, `"headers"`, `"attributes"`, `"predefined"`. Browse mode при пустом query + конкретный scope. Graceful degradation при отсутствии таблиц. Возвращает text, source_type, object_name, path, path_kind, detail
+- `search_methods(query, limit=30)` — полнотекстовый поиск методов по подстроке имени во всей конфигурации. Требует SQLite-индекс (FTS5, ранжирование BM25). Возвращает имя, тип, is_export, путь к модулю, имя объекта
+- `search_objects(query, limit=50)` — поиск объектов 1С по бизнес-имени (русскому синониму) или техническому имени. Требует SQLite-индекс v7+ с таблицей `object_synonyms`. Кириллический case-insensitive поиск через UDF `py_lower()`. 4-уровневое ранжирование: exact name > prefix > synonym substring > category. Возвращает object_name, category, synonym (с категорийным префиксом), file
+- `search_regions(query, limit=30)` — поиск областей `#Область` по имени во всей конфигурации. Требует SQLite-индекс v8+ с таблицей `regions`. Возвращает имя области, путь к модулю, диапазон строк
+- `search_module_headers(query, limit=30)` — поиск модулей по заголовочному комментарию. Требует SQLite-индекс v8+ с таблицей `module_headers`. Возвращает путь к модулю, текст заголовка
+- `get_index_info()` — метаданные индекса: версия, конфигурация, доступные возможности (FTS, синонимы). Позволяет агенту понять, какие хелперы доступны в текущей сессии
+- `find_http_services(name='')` — HTTP-сервисы (REST API) конфигурации. Извлекает имя, корневой URL, шаблоны URL с HTTP-методами и обработчиками. CF и EDT форматы. Поддерживает фильтрацию по имени (LIKE)
+- `find_web_services(name='')` — веб-сервисы SOAP. Извлекает имя, namespace, операции с параметрами, типами возврата и процедурами-обработчиками. CF и EDT форматы
+- `find_xdto_packages(name='')` — XDTO-пакеты (контракты данных). Метаданные (имя, namespace) для обоих форматов. Типы (objectType/valueType с properties) — только для EDT (из `Package.xdto`). Для CF типы бинарные (`Package.bin`) — `types=[]`
+- `find_exchange_plan_content(name)` — состав плана обмена: какие объекты входят и с каким режимом авторегистрации (Allow/Deny). CF: `Ext/Content.xml`, EDT: inline в `.mdo`. **При наличии SQLite-индекса v12+** — мгновенный ответ из таблицы `exchange_plan_content`. Без индекса — live XML-парсинг
+- `find_references_to_object(object_ref, kinds=None, limit=1000)` — **аналог конфигуратора «Найти ссылки → В свойствах»** (issue [#10](https://github.com/Dach-Coin/rlm-tools-bsl/issues/10)). Поиск всех мест использования объекта метаданных. Покрывает 18 видов ссылок: `attribute_type`, `subsystem_content`, `exchange_plan_content`, `functional_option_content`, `event_subscription_source`, `role_rights`, `defined_type_content`, `characteristic_type`, `owner`, `based_on`, `main_form`, `list_form`, `default_object_form`, `default_list_form`, `command_parameter_type`, `predefined_characteristic_type` и др. Принимает русские (`Справочник.X`) и английские (`Catalog.X`) префиксы, Ref/Object/Manager-формы; в БД хранится канонический `Catalog.X`. **При наличии SQLite-индекса v12+** — мгновенный ответ из unified reverse-index таблицы `metadata_references`. На v11 — live XML-фолбэк с `partial=True`. Возвращает `{object, references: [{used_in, path, line, kind}], total, truncated, partial, by_kind}`. Поле `line` опционально (заполняется только где дёшево)
+- `find_defined_types(name)` — раскрытие `ОпределяемогоТипа` в список реальных типов (`Catalog.X`, `Number` и т.п.). **При наличии SQLite-индекса v12+** — мгновенный ответ из таблицы `defined_types`. Без индекса — live XML-парсинг (CF: `DefinedTypes/X.xml`, EDT: `DefinedTypes/X/X.mdo`). Возвращает `{name, types: list[str], path, partial}`
+
+## LLM-хелперы
+
+- `llm_query(prompt, context='')` — отправить запрос в LLM (OpenAI-совместимый API). Контекст ограничен ~3000 символов. При пустом ответе — разбить контекст на части
+- `llm_query_batched(prompts, context='')` — батч-запрос нескольких промптов с общим контекстом
+
+## Форматы нумерации строк (MCP-сессии)
+
+В MCP-сессиях (через `rlm_start`) хелперы возвращают код с номерами строк:
+
+- `42 | код` — полный файл или тело процедуры (`read_file`, `read_files`, `read_procedure`, `grep_read` с `context_lines=0`)
+- `L42: код` — excerpt/контекст вокруг совпадения (`grep_read` с `context_lines>0`)
+
+Raw API фабрик `make_helpers()`/`make_bsl_helpers()` не затронут — нумерация добавляется только в presentation layer (Sandbox).
+
+## Ускорение индексом (SQLite)
+
+При наличии предварительно построенного SQLite-индекса (`rlm-bsl-index index build`) следующие хелперы работают мгновенно из базы данных вместо live-парсинга и обхода файловой системы:
+
+| Хелпер                             | С индексом                                         | Без индекса                 |
+| ---------------------------------- | -------------------------------------------------- | --------------------------- |
+| `extract_procedures(path)`         | `SELECT` из `methods`                              | Regex-парсинг .bsl          |
+| `find_exports(path)`               | `SELECT WHERE is_export=1`                         | Фильтр `extract_procedures` |
+| `find_callers_context(proc)`       | `JOIN calls+methods+modules`                       | Параллельный scan+grep .bsl |
+| `find_event_subscriptions(obj)`    | `SELECT` из `event_subscriptions`                  | XML-парсинг                 |
+| `find_scheduled_jobs(name)`        | `SELECT` из `scheduled_jobs`                       | XML-парсинг                 |
+| `find_functional_options(obj)`     | `SELECT` из `functional_options`                   | XML-парсинг                 |
+| `find_enum_values(name)`           | `SELECT` из `enum_values`                          | Glob + XML-парсинг          |
+| `analyze_subsystem(name)`          | `SELECT` из `subsystem_content`                    | Glob + XML-парсинг          |
+| `find_roles(obj)`                  | `SELECT` из `role_rights`                          | Парсинг Rights.xml          |
+| `find_register_movements(doc)`     | `SELECT` из `register_movements`                   | Grep по ObjectModule        |
+| `find_register_writers(reg)`       | `SELECT` из `register_movements`                   | Параллельный поиск          |
+| `glob_files(pattern)`              | `SELECT` из `file_paths` (поддерживаемые паттерны) | `pathlib.Path.glob()`       |
+| `tree(path)`                       | `SELECT` из `file_paths`                           | Рекурсивный `iterdir()`     |
+| `find_files(name)`                 | `SELECT` из `file_paths` с ранжированием           | `os.walk()`                 |
+| `find_http_services(name)`         | `SELECT` из `http_services`                        | Glob + XML-парсинг          |
+| `find_web_services(name)`          | `SELECT` из `web_services`                         | Glob + XML-парсинг          |
+| `find_xdto_packages(name)`         | `SELECT` из `xdto_packages`                        | Glob + XML-парсинг          |
+| `find_exchange_plan_content(name)` | `SELECT` из `exchange_plan_content` (v12+)         | Glob + XML-парсинг          |
+| `find_references_to_object(obj)`   | `SELECT` из `metadata_references` (v12+)           | Live XML-парсинг (partial)  |
+| `find_defined_types(name)`         | `SELECT` из `defined_types` (v12+)                 | Live XML-парсинг (partial)  |
+| `search(query, scope, limit)`      | Делегирует в индексированные поисковики             | `[]`                        |
+| `search_methods(query)`            | FTS5 (BM25)                                        | Недоступен                  |
+| `search_objects(query)`            | `SELECT` из `object_synonyms` с UDF `py_lower()`   | Недоступен                  |
+| `search_regions(query)`            | `SELECT` из `regions`                              | Недоступен                  |
+| `search_module_headers(query)`     | `SELECT` из `module_headers`                       | Недоступен                  |
+| `find_attributes(name)`           | `SELECT` из `object_attributes`                    | Live XML-парсинг            |
+| `find_predefined(name)`           | `SELECT` из `predefined_items`                     | Live XML-парсинг            |
+
+Подробности: [docs/INDEXING.md](INDEXING.md)
+
+## Совместимость с оригинальным rlm-tools
+
+Весь функционал оригинального [rlm-tools](https://github.com/stefanoshea/rlm-tools) сохранён:
+- Три MCP-инструмента (`rlm_start`, `rlm_execute`, `rlm_end`)
+- Все стандартные хелперы песочницы (`read_file`, `grep`, `glob_files`, `tree`, `llm_query` и др.)
+- Настройки (`RLM_MAX_SESSIONS`, `RLM_SESSION_TIMEOUT`, уровни effort)
+- Безопасность песочницы (read-only, ограниченные импорты, таймауты — 45 сек на Windows и Unix)
+- Работа с любыми кодовыми базами (не только 1С)
+
+BSL-функционал добавлен поверх, не ломая исходную механику.
+
+## Расширения (CFE)
+
+- `detect_extensions()` — обнаружить расширения рядом с анализируемой конфигурацией (имена, пути, префиксы, назначения). Детектирование по XML-маркерам (Configuration.xml / Configuration.mdo), без хардкода имён каталогов
+- `find_ext_overrides(extension_path, object_name='')` — найти перехваченные методы в расширении: аннотации `&Перед`, `&После`, `&Вместо`, `&ИзменениеИКонтроль`. Прицельный поиск по имени объекта или полный скан всех модулей расширения
+- `get_overrides(object_name='', method_name='')` — мгновенный запрос перехватов из индекса (v9+). Live fallback на v8/без индекса. Возвращает `{overrides: [...], total, source: "index"|"live"|"unavailable"}`
+- `extract_procedures(path)` — при наличии индекса v9+ каждый перехваченный метод содержит поле `overridden_by` со списком перехватов (аннотация, расширение, метод, путь, строка)
+- `read_procedure(path, proc_name, include_overrides=False)` — с `include_overrides=True` дописывает тело расширенного метода с аннотацией и файловой ссылкой (override-тела тоже нумеруются в MCP-сессии). Без параметра — обратная совместимость, чистое тело
+
+## Оптимизации для совместимости с разными AI-моделями
+
+При тестировании с различными AI-клиентами и моделями (Kilo Code + minimax m2.5, glm-5, Nvidia Nemotron, gpt-5.4; Claude Code + Sonnet 4.6) были выявлены проблемы: слабые модели не понимали парадигму песочницы, путали хелперы с MCP-инструментами, не знали форматы возвращаемых данных. Для решения этих проблем внесены следующие оптимизации:
+
+- **Пошаговый WORKFLOW** — ответ `rlm_start` содержит пошаговый план работы (DISCOVER → READ → TRACE → ANALYZE → EXTENSIONS) с указанием конкретных хелперов на каждом шаге. Компактная таблица хелперов с возвратными типами. Детальные рецепты с Python-сниппетами доступны через `help('keyword')` внутри песочницы
+- **Хелпер `help(task)`** — интерактивный маршрутизатор рецептов внутри песочницы (см. выше)
+- **Толерантный `find_by_type`** — принимает категории в единственном числе (`"Document"` вместо `"Documents"`), русские названия (`"Справочник"`, `"РегистрСведений"`), регистронезависимо
+- **Параллельный prefilter в `find_callers_context`** — `ThreadPoolExecutor` сканирует **все** BSL-файлы конфигурации параллельно (~7-15 секунд на 23K файлов), без лимита и усечения. Результаты кэшируются в рамках сессии — повторные вызовы мгновенны
+- **Grep guard** — защита от широких путей. Вызов `grep(pattern, '.')` или `grep(pattern, 'CommonModules')` на конфигурации с >5000 файлов мгновенно возвращает ошибку с подсказкой вместо 60-секундного таймаута. `grep` на конкретных файлах и небольших каталогах работает как обычно
+- **Делегирование `find_callers` → `find_callers_context`** — даже если слабая модель вызовет простой `find_callers()`, она получит полноценный результат с параллельным сканированием, а не ограниченный grep по 20 файлам
+- **Авто-детект нетиповых префиксов** — при старте сессии анализируются имена объектов в индексе, выделяются частотные lowercase-префиксы. Порог: 3+ вхождения для основных конфигураций, 1 для расширений (определяется по `config_role` из индекса). При наличии SQLite-индекса префиксы читаются из `index_meta` (мгновенно), без индекса — сканирование объектов. Результат возвращается в `detected_custom_prefixes` ответа `rlm_start` и в блоке DETECTED CUSTOM PREFIXES стратегии
+- **Auto-strip типа метаданных** — все хелперы автоматически очищают префикс типа (`Документ.РеализацияТоваровУслуг` → `РеализацияТоваровУслуг`). Модель может передавать имена в любом формате без ошибок
+- **Авто-детект расширений** — при старте сессии определяется роль конфигурации (основная/расширение) по XML-маркерам (Configuration.xml / Configuration.mdo). Автоматически сканируются соседние каталоги (1-2 уровня вверх) на наличие расширений или основной конфигурации. Результат — в `extension_context` ответа `rlm_start` и top-level `warnings`. В стратегии — CRITICAL-блок с директивами `YOU MUST` для проверки перехватов. Поддерживаются аннотации `&Перед`, `&После`, `&Вместо`, `&ИзменениеИКонтроль`
+- **Структурированная стратегия** — ответ `rlm_start` содержит пошаговый WORKFLOW (DISCOVER → READ → TRACE → ANALYZE → EXTENSIONS) вместо монолитного текста. Секции с заголовками `== SECTION ==`, компактная таблица хелперов с возвратными типами, ссылки на `help('keyword')` для детальных рецептов
+- **SQLite Level-3 ускорение** — при наличии индекса `find_roles()`, `find_register_movements()`, `find_register_writers()` работают мгновенно из нормализованных таблиц `role_rights` и `register_movements`. Таблица `role_rights` строится параллельно с BSL regex-парсингом (CF: Rights.xml, EDT: .rights). Таблица `register_movements` извлекается in-band при обработке BSL-файлов документов (без дополнительного I/O). Без индекса — fallback на live-парсинг XML и grep
+- **Описания MCP-инструментов** — docstrings `rlm_start` и `rlm_execute` явно указывают, что `code` — это Python-код, что нужно использовать `print()`, содержат пример вызова
+
+## Индекс и слабые модели
+
+Без предварительно построенного индекса (`rlm-bsl-index index build <path>`) слабые модели (Kilo Auto, Qwen 3.6 Plus, Minimax и др.) не смогут качественно выполнить анализ:
+
+- `find_attributes(name=...)`, `find_predefined(name=...)`, `search()`, `search_methods()`, `search_objects()`, `search_regions()`, `search_module_headers()` — возвращают пустые результаты без индекса
+- `find_attributes(object_name=...)`, `find_predefined(object_name=...)` — работают через XML-fallback, но требуют многошаговой логики (find_module → category → XML-парсинг)
+
+Сильные модели (Claude Sonnet/Opus, GPT) способны самостоятельно выстроить цепочку fallback-вызовов. Слабые модели видят пустой результат и сдаются, не пытаясь использовать альтернативные хелперы.
+
+**Рекомендация:** всегда стройте индекс перед работой со слабыми моделями. Для сильных моделей индекс опционален, но значительно ускоряет анализ (1s vs 20-50s на старт сессии, мгновенные поиски vs таймауты на find_roles/find_functional_options).

@@ -1,0 +1,96 @@
+[project]
+name = "rlm-tools-bsl"
+version = "1.9.3"
+description = "MCP server for token-efficient 1C BSL codebase analysis"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Dach-Coin" },
+]
+keywords = ["1c", "bsl", "mcp", "code-analysis", "ai-tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+    "mcp[cli]>=1.2.0",
+    "anthropic>=0.40.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+rlm-tools-bsl = "rlm_tools_bsl.server:main"
+rlm-bsl-index = "rlm_tools_bsl.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rlm_tools_bsl"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=6.0",
+]
+service = [
+    "pywin32>=306; sys_platform == 'win32'",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=6.0",
+    "ruff>=0.15.8",
+    "pre-commit>=4.0",
+]
+service = [
+    "pywin32>=306; sys_platform == 'win32'",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E501"]
+per-file-ignores = {"src/rlm_tools_bsl/bsl_helpers.py" = ["E402"], "src/rlm_tools_bsl/server.py" = ["E402"], "benchmarks/run_benchmark.py" = ["E402"]}
+
+[tool.coverage.run]
+source = ["src/rlm_tools_bsl"]
+omit = [
+    "src/rlm_tools_bsl/__main__.py",
+    "src/rlm_tools_bsl/_service_win.py",
+    "src/rlm_tools_bsl/_service_linux.py",
+    "src/rlm_tools_bsl/service.py",
+]
+
+[tool.coverage.report]
+fail_under = 70
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+    "if TYPE_CHECKING:",
+]
+
+[project.urls]
+Homepage = "https://github.com/Dach-Coin/rlm-tools-bsl"
+Repository = "https://github.com/Dach-Coin/rlm-tools-bsl"
+Issues = "https://github.com/Dach-Coin/rlm-tools-bsl/issues"
+Changelog = "https://github.com/Dach-Coin/rlm-tools-bsl/blob/master/CHANGELOG.md"
