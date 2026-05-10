@@ -21,7 +21,7 @@ Takes a compact JSON definition and generates a correct Template.xml for a 1C sp
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-mxl-compile/scripts/mxl-compile.ps1 -JsonPath "<path>.json" -OutputPath "<path>/Template.xml"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-mxl-compile/scripts/mxl-compile.ps1 -JsonPath "<path>.json" -OutputPath "<path>/Template.xml"
 ```
 
 ### Workflow
@@ -75,7 +75,7 @@ Takes a Template.xml of a 1C spreadsheet document and generates a compact JSON d
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-mxl-decompile/scripts/mxl-decompile.ps1 -TemplatePath "<path>/Template.xml" [-OutputPath "<path>.json"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-mxl-decompile/scripts/mxl-decompile.ps1 -TemplatePath "<path>/Template.xml" [-OutputPath "<path>.json"]
 ```
 
 ### Workflow
@@ -131,12 +131,12 @@ Specify either `-TemplatePath`, or both `-ProcessorName` and `-TemplateName`.
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-mxl-info/scripts/mxl-info.ps1 -TemplatePath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-mxl-info/scripts/mxl-info.ps1 -TemplatePath "<path>"
 ```
 
 Or by processor/template name:
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-mxl-info/scripts/mxl-info.ps1 -ProcessorName "<Name>" -TemplateName "<Template>" [-SrcDir "<dir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-mxl-info/scripts/mxl-info.ps1 -ProcessorName "<Name>" -TemplateName "<Template>" [-SrcDir "<dir>"]
 ```
 
 Additional flags:
@@ -283,12 +283,12 @@ Specify either `-TemplatePath`, or both `-ProcessorName` and `-TemplateName`.
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-mxl-validate/scripts/mxl-validate.ps1 -TemplatePath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-mxl-validate/scripts/mxl-validate.ps1 -TemplatePath "<path>"
 ```
 
 Or by processor/template name:
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-mxl-validate/scripts/mxl-validate.ps1 -ProcessorName "<Name>" -TemplateName "<Template>" [-SrcDir "<dir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-mxl-validate/scripts/mxl-validate.ps1 -ProcessorName "<Name>" -TemplateName "<Template>" [-SrcDir "<dir>"]
 ```
 
 ### Checks Performed

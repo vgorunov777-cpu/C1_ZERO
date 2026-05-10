@@ -275,7 +275,7 @@ Creates a managed form (metadata XML + Form.xml + Module.bsl) and registers it i
 
 **Command:**
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-form-scaffold/scripts/form-add.ps1 -ObjectPath "<ObjectPath>" -FormName "<FormName>" [-Purpose "<Purpose>"] [-Synonym "<Synonym>"] [-SetDefault]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-scaffold/scripts/form-add.ps1 -ObjectPath "<ObjectPath>" -FormName "<FormName>" [-Purpose "<Purpose>"] [-Synonym "<Synonym>"] [-SetDefault]
 ```
 
 #### For External Data Processors (EPF)
@@ -294,7 +294,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-form-scaffold
 
 **Command:**
 ```powershell
-pwsh -NoProfile -File skills/1c-metadata-manage/tools/1c-form-scaffold/scripts/add-form.ps1 -ProcessorName "<ProcessorName>" -FormName "<FormName>" [-Synonym "<Synonym>"] [-Main] [-SrcDir "<SrcDir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-scaffold/scripts/add-form.ps1 -ProcessorName "<ProcessorName>" -FormName "<FormName>" [-Synonym "<Synonym>"] [-Main] [-SrcDir "<SrcDir>"]
 ```
 
 #### Purpose — Form Assignment
@@ -356,7 +356,7 @@ Remove form files and unregister from the object's root XML.
 
 **Command:**
 ```powershell
-pwsh -NoProfile -File skills/1c-metadata-manage/tools/1c-form-scaffold/scripts/remove-form.ps1 -ProcessorName "<ProcessorName>" -FormName "<FormName>" [-SrcDir "<SrcDir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-scaffold/scripts/remove-form.ps1 -ProcessorName "<ProcessorName>" -FormName "<FormName>" [-SrcDir "<SrcDir>"]
 ```
 
 #### What Gets Removed
@@ -420,7 +420,7 @@ Takes a compact JSON definition (20–50 lines) and generates a complete, valid 
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-form-compile/scripts/form-compile.ps1 -JsonPath "<json>" -OutputPath "<xml>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-compile/scripts/form-compile.ps1 -JsonPath "<json>" -OutputPath "<xml>"
 ```
 
 ### JSON DSL Reference
@@ -724,7 +724,7 @@ Adds elements, attributes, and/or commands to an existing Form.xml. Automaticall
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-form-edit/scripts/form-edit.ps1 -FormPath "<path>" -JsonPath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-edit/scripts/form-edit.ps1 -FormPath "<path>" -JsonPath "<path>"
 ```
 
 ### JSON Format
@@ -834,12 +834,12 @@ Reads a Form.xml of a managed form and outputs a compact summary: element tree, 
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-form-info/scripts/form-info.ps1 -FormPath "<path to Form.xml>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-info/scripts/form-info.ps1 -FormPath "<path to Form.xml>"
 ```
 
 With pagination:
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-form-info/scripts/form-info.ps1 -FormPath "<path>" -Offset 150
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-info/scripts/form-info.ps1 -FormPath "<path>" -Offset 150
 ```
 
 ### Reading the Output
@@ -1004,7 +1004,7 @@ Checks Form.xml of a managed form for structural errors: ID uniqueness, companio
 ### Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-form-validate/scripts/form-validate.ps1 -FormPath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-form-validate/scripts/form-validate.ps1 -FormPath "<path>"
 ```
 
 ### Checks Performed

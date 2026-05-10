@@ -21,22 +21,25 @@ alwaysApply: false
 | **Пользователь (UserName)** | *(без пользователя — автовход)* |
 | **Пароль (Password)** | *(без пароля — не указывать)* |
 
+Скрипты сборки и запуска — в агрегированном skill: `.cursor/skills/1c-metadata-manage/tools/**/scripts/*.ps1`
+(не использовать устаревшие пути `.claude/skills/...`).
+
 ### Сборка обработки EPF
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -SourceFile "src/МояОбработка.xml" -OutputFile "build/МояОбработка.epf"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -SourceFile "src/МояОбработка.xml" -OutputFile "build/МояОбработка.epf"
 ```
 
 ### Сборка отчёта ERF
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -SourceFile "src/МойОтчёт.xml" -OutputFile "build/МойОтчёт.erf"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-epf-build/scripts/epf-build.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -SourceFile "src/МойОтчёт.xml" -OutputFile "build/МойОтчёт.erf"
 ```
 
 ### Запуск обработки EPF — обычный режим (по умолчанию)
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .claude/skills/db-run/scripts/db-run.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -Execute "Projects/003 Hello World/HelloWorld.epf"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-run.ps1 -V8Path "C:\Program Files (x86)\1cv8\common\1cestart.exe" -InfoBasePath "D:\С1\C1_ZERO_GIT" -Execute "Projects/003 Hello World/HelloWorld.epf"
 ```
 
 ### Запуск 1С — ламповый режим

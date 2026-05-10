@@ -17,7 +17,7 @@ Adds built-in help to a 1C metadata object: help metadata file (`Help.xml`), HTM
 ## Command
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-help-manage/scripts/add-help.ps1 -ProcessorName "<ObjectName>" [-Lang "<Lang>"] [-SrcDir "<SrcDir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-help-manage/scripts/add-help.ps1 -ProcessorName "<ObjectName>" [-Lang "<Lang>"] [-SrcDir "<SrcDir>"]
 ```
 
 ## What Gets Created

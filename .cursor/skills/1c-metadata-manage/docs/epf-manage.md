@@ -23,7 +23,7 @@ Generates the minimal set of XML source files for a 1C external data processor: 
 ### Command
 
 ```powershell
-pwsh -NoProfile -File skills/1c-metadata-manage/tools/1c-epf-scaffold/scripts/init.ps1 -Name "<Name>" [-Synonym "<Synonym>"] [-SrcDir "<SrcDir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-epf-scaffold/scripts/init.ps1 -Name "<Name>" [-Synonym "<Synonym>"] [-SrcDir "<SrcDir>"]
 ```
 
 ### What Gets Created
@@ -59,7 +59,7 @@ Generates the minimal set of XML source files for a 1C external report: root met
 ### Usage
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-erf-scaffold/scripts/init.ps1 -Name "<Name>" [-Synonym "<Synonym>"] [-SrcDir "<SrcDir>"] [-WithSKD]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-erf-scaffold/scripts/init.ps1 -Name "<Name>" [-Synonym "<Synonym>"] [-SrcDir "<SrcDir>"] [-WithSKD]
 ```
 
 | Parameter | Required | Default | Description |
@@ -115,7 +115,7 @@ Builds an EPF or ERF file from XML sources using the 1C platform. The same scrip
 ### Usage
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-epf-build/scripts/epf-build.ps1 <parameters>
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-epf-build/scripts/epf-build.ps1 <parameters>
 ```
 
 | Parameter | Required | Description |
@@ -169,7 +169,7 @@ Disassembles an EPF or ERF file into XML sources using the 1C platform (hierarch
 ### Usage
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-epf-dump/scripts/epf-dump.ps1 <parameters>
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-epf-dump/scripts/epf-dump.ps1 <parameters>
 ```
 
 | Parameter | Required | Description |
@@ -240,7 +240,7 @@ The script auto-detects the type (ExternalDataProcessor or ExternalReport).
 ### Usage
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-epf-validate/scripts/epf-validate.ps1 -ObjectPath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-epf-validate/scripts/epf-validate.ps1 -ObjectPath "<path>"
 ```
 
 | Parameter | Required | Default | Description |

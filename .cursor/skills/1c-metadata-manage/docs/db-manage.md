@@ -172,7 +172,7 @@ Read `.v8-project.json` from the project root. Take `v8path` and resolve the dat
 ### 1. Create Infobase
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-create.ps1 -InfoBasePath "C:\Bases\NewDB"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-create.ps1 -InfoBasePath "C:\Bases\NewDB"
 ```
 
 | Extra Parameter | Description |
@@ -188,7 +188,7 @@ After creation: offer to register via `1c-db-manage add`.
 ### 2. Run 1C Enterprise
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-run.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-run.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin"
 ```
 
 | Extra Parameter | Description |
@@ -204,7 +204,7 @@ Launches 1C in background — control returns immediately.
 ### 3. Update Database Configuration
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-update.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-update.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin"
 ```
 
 Applies main configuration changes to the database configuration (`/UpdateDBCfg`). Required step after `db-load-cf`, `db-load-xml`, `db-load-git`.
@@ -224,7 +224,7 @@ Applies main configuration changes to the database configuration (`/UpdateDBCfg`
 ### 4. Dump Configuration to CF
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-dump-cf.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -OutputFile "config.cf"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-dump-cf.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -OutputFile "config.cf"
 ```
 
 | Extra Parameter | Description |
@@ -238,7 +238,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/script
 ### 5. Load Configuration from CF
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-load-cf.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -InputFile "config.cf"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-load-cf.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -InputFile "config.cf"
 ```
 
 > **Warning**: Loading CF **completely replaces** the configuration. Request user confirmation before executing.
@@ -255,7 +255,7 @@ After loading: offer to run `db-update` to apply changes to the database.
 ### 6. Dump Configuration to XML
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-dump-xml.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -ConfigDir "src/cf" -Mode Full
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-dump-xml.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -ConfigDir "src/cf" -Mode Full
 ```
 
 | Extra Parameter | Description |
@@ -282,7 +282,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/script
 ### 7. Load Configuration from XML
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-load-xml.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -ConfigDir "src/cf" -Mode Full
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-load-xml.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -ConfigDir "src/cf" -Mode Full
 ```
 
 > **Warning**: Full load **replaces the entire configuration**. Request user confirmation.
@@ -303,7 +303,7 @@ After loading: offer to run `db-update`.
 ### 8. Load Changes from Git
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-load-git.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -ConfigDir "src/cf" -Source All
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-db-ops/scripts/db-load-git.ps1 -InfoBasePath "C:\Bases\MyDB" -UserName "Admin" -ConfigDir "src/cf" -Source All
 ```
 
 Determines changed configuration files from Git data and performs partial load into the infobase.

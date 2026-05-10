@@ -1,6 +1,5 @@
 ---
-description: Development standards — module structure templates and form modification rules
-globs: "**/Form.Module.bsl"
+description: "Детальные стандарты структуры модулей и форм; читать после forms_add.mdc при задачах по формам."
 alwaysApply: false
 ---
 

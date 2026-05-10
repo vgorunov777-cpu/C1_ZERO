@@ -1,36 +1,35 @@
 ---
-description: when working on form modules (ФормаМодуль, Form.Module.bsl)
-globs: "**/Form.Module.bsl"
+description: "Детальные правила модулей форм; читать после forms_add.mdc при изменении Form.Module.bsl."
 alwaysApply: false
 ---
 
-# Form Module Guidelines
+# Правила модуля формы
 
-## Client-Server Interaction
+## Клиент-сервер
 
-- Minimize client-server round trips in form modules.
-- Group multiple server calls into a single call when possible.
-- Avoid calling server methods in loops on the client side.
+- Минимизировать клиент-серверные вызовы из модуля формы.
+- Группировать несколько серверных обращений в один вызов, если это не ухудшает читаемость.
+- Не вызывать серверные методы в клиентских циклах.
 
-## Compilation Directives
+## Директивы компиляции
 
-Available compilation directives for form module methods:
+Директивы для методов модуля формы:
 
-| Directive | Context | Use Case |
+| Директива | Контекст | Когда использовать |
 |-----------|---------|----------|
-| `&НаКлиенте` | Client-side execution | UI interactions, user input handling |
-| `&НаСервере` | Server-side with form context | When you need to modify form attributes/items |
-| `&НаСервереБезКонтекста` | Server-side without form context | **Preferred** for data operations when form context is not needed (reduces data transfer) |
-| `&НаКлиентеНаСервереБезКонтекста` | Both client and server without context | Shared utility functions |
+| `&НаКлиенте` | Клиент | UI, пользовательский ввод, команды формы |
+| `&НаСервере` | Сервер с контекстом формы | Когда нужно читать/менять реквизиты или элементы формы |
+| `&НаСервереБезКонтекста` | Сервер без контекста формы | Предпочтительно для операций с данными без контекста формы |
+| `&НаКлиентеНаСервереБезКонтекста` | Клиент и сервер без контекста | Общие утилитарные функции |
 
-- Prefer `&НаСервереБезКонтекста` over `&НаСервере` when form context is not required — it reduces network traffic.
+- Предпочитать `&НаСервереБезКонтекста`, если контекст формы не нужен.
 
-## Async Programming
+## Асинхронность
 
-- Prefer `Асинх` (async) methods over `ОписаниеОповещения` (notification description) when async analogues are available.
-- Use `Ждать` (Await) for cleaner async code flow.
+- Предпочитать `Асинх` и `Ждать`, если доступны асинхронные аналоги платформы.
+- Не смешивать асинхронную и модальную модель в одном пользовательском сценарии.
 
-## Form Data
+## Данные формы
 
-- Use `ДанныеФормыВЗначение()` / `ЗначениеВДанныеФормы()` to convert between form data and actual objects.
-- Remember that form attributes are not the same as object attributes — they are form-specific representations.
+- Использовать `ДанныеФормыВЗначение()` / `ЗначениеВДанныеФормы()` для преобразования между данными формы и объектом.
+- Помнить, что реквизиты формы не равны реквизитам объекта: это представление данных формы.

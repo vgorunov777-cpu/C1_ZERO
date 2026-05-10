@@ -15,7 +15,7 @@ Takes a JSON definition of a metadata object and generates XML + modules in the 
 | `OutputDir` | Root directory of the configuration export (where `Catalogs/`, `Documents/`, etc. are located) |
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-meta-compile/scripts/meta-compile.ps1 -JsonPath "<json>" -OutputDir "<ConfigDir>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-meta-compile/scripts/meta-compile.ps1 -JsonPath "<json>" -OutputDir "<ConfigDir>"
 ```
 
 `OutputDir` — directory containing type subfolders (`Catalogs/`, `Documents/`, ...) and `Configuration.xml`.
@@ -188,13 +188,13 @@ Atomic modification operations on existing metadata object XML files.
 ### Inline Mode (simple operations)
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-meta-edit/scripts/meta-edit.ps1 -ObjectPath "<path>" -Operation <op> -Value "<val>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-meta-edit/scripts/meta-edit.ps1 -ObjectPath "<path>" -Operation <op> -Value "<val>"
 ```
 
 ### JSON Mode (complex/combined operations)
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-meta-edit/scripts/meta-edit.ps1 -DefinitionFile "<json>" -ObjectPath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-meta-edit/scripts/meta-edit.ps1 -DefinitionFile "<json>" -ObjectPath "<path>"
 ```
 
 | Parameter | Description |
@@ -209,7 +209,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-meta-edit/scr
 
 Batch via `;;` in all operations. Detailed syntax in linked reference files.
 
-### Child Elements — [child-operations.md](skills/1c-metadata-manage/tools/1c-meta-edit/child-operations.md)
+### Child Elements — [child-operations.md](.cursor/skills/1c-metadata-manage/tools/1c-meta-edit/child-operations.md)
 
 | Operation | Value Format | Example |
 |-----------|-------------|---------|
@@ -229,7 +229,7 @@ Batch via `;;` in all operations. Detailed syntax in linked reference files.
 
 Positional insert: `"Склад: CatalogRef.Склады >> after Организация"`.
 
-### Object Properties — [properties-reference.md](skills/1c-metadata-manage/tools/1c-meta-edit/properties-reference.md)
+### Object Properties — [properties-reference.md](.cursor/skills/1c-metadata-manage/tools/1c-meta-edit/properties-reference.md)
 
 | Operation | Value Format | Example |
 |-----------|-------------|---------|
@@ -241,7 +241,7 @@ Positional insert: `"Склад: CatalogRef.Склады >> after Организ
 | `set-owners` / `set-registerRecords` / `set-basedOn` / `set-inputByString` | Replace entire list | `"Catalog.Орг ;; Catalog.Контр"` |
 | `remove-owner` / `remove-registerRecord` / ... | Remove from list | `"Catalog.Контрагенты"` |
 
-### JSON DSL — [json-dsl.md](skills/1c-metadata-manage/tools/1c-meta-edit/json-dsl.md)
+### JSON DSL — [json-dsl.md](.cursor/skills/1c-metadata-manage/tools/1c-meta-edit/json-dsl.md)
 
 For combined operations (add + remove + modify in one file), key/type synonyms, supported object table.
 
@@ -290,7 +290,7 @@ Reads a metadata object XML from a 1C configuration export and outputs a compact
 | `OutFile` | Write result to file (UTF-8 BOM) |
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-meta-info/scripts/meta-info.ps1 -ObjectPath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-meta-info/scripts/meta-info.ps1 -ObjectPath "<path>"
 ```
 
 ## Three Modes
@@ -343,7 +343,7 @@ Safely removes an object from a 1C configuration XML export. Before deletion, ch
 ## Usage
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-meta-remove/scripts/meta-remove.ps1 -ConfigDir "<path>" -Object "Catalog.Товары"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-meta-remove/scripts/meta-remove.ps1 -ConfigDir "<path>" -Object "Catalog.Товары"
 ```
 
 ## Parameters
@@ -416,7 +416,7 @@ Checks a metadata object XML from a configuration export for structural errors: 
 `ObjectPath` auto-resolve: if a directory is given — looks for `<dirName>/<dirName>.xml`.
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-meta-validate/scripts/meta-validate.ps1 -ObjectPath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-meta-validate/scripts/meta-validate.ps1 -ObjectPath "<path>"
 ```
 
 ## Supported Types (23)

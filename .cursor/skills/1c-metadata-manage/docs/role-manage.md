@@ -216,7 +216,7 @@ Parses a role's `Rights.xml` and outputs a compact summary: objects grouped by t
 ## Command
 
 ```powershell
-powershell.exe -File skills/1c-metadata-manage/tools/1c-role-info/scripts/role-info.ps1 -RightsPath <path> -OutFile <output.txt>
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-role-info/scripts/role-info.ps1 -RightsPath <path> -OutFile <output.txt>
 ```
 
 ### Parameters
@@ -285,7 +285,7 @@ Checks correctness of a role's `Rights.xml`: XML format, namespace, global flags
 ## Usage
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-role-validate/scripts/role-validate.ps1 -RightsPath <path> [-MetadataPath <path>] [-OutFile <output.txt>]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-role-validate/scripts/role-validate.ps1 -RightsPath <path> [-MetadataPath <path>] [-OutFile <output.txt>]
 ```
 
 ### Parameters

@@ -1,30 +1,31 @@
 ---
-description: only when you need to generate or modify form
+description: "Единый вход для задач генерации или изменения управляемых форм 1С."
 alwaysApply: false
 ---
 
-# Use following instructions only if you need to generate or modify 1C form
+# Формы 1С
 
-> **Note**: MCP tools from `1c-code-metadata-mcp` provide search, analysis, schema, and validation. Tools from `1c-forms-mcp` provide design examples and instructions. For actual form compilation, editing, and validation — use the **1c-metadata-manage** skill (form-manage section).
+Этот файл — короткий входной маршрут. Детали подключать только по нужному сценарию:
 
-## To generate new form:
-   Step 1: use **'search_forms'** to find similar existing forms in the configuration. Provide the metadata object name or form purpose as query
-   Step 2: use **'inspect_form_layout'** to study the structure of a found similar form — element hierarchy, data bindings, attributes, commands, event handlers
-   Step 3: use **'metadatasearch'** (`names_only=true`) to find similar metadata objects for XML reference
-   Step 4: use **'get_xsd_schema'** with `object_type="Форма"` to get the XSD schema and understand valid Form.xml structure
-   Step 5: generate Form.xml based on examples and schema
-   Step 6: use **'verify_xml'** with `object_type="Форма"` to validate generated XML against XSD. Fix errors if any
-   Step 7: use **1c-metadata-manage** skill (form-manage section) to compile and deploy the form
+- правила модуля формы: `@rules/form_module_rules.mdc`;
+- структура регионов и визуальные правила формы: `@rules/dev-standards-forms.mdc`;
+- добавление обработчиков событий в `Form.xml`: `@rules/forms_events_add.mdc`.
 
-## To modify existing form:
-   Step 1: use **'inspect_form_layout'** to get current form structure (elements, bindings, commands, events)
-   Step 2: use **'get_xsd_schema'** with `object_type="Форма"` to get schema for valid modifications
-   Step 3: modify Form.xml according to schema constraints
-   Step 4: use **'verify_xml'** with `object_type="Форма"` to validate changes
-   Step 5: use **1c-metadata-manage** skill (form-edit, form-validate) for actual modifications
+## Генерация новой формы
 
-## Additional tools (1c-forms-mcp, if available):
-  - use **'genterate_example_form'** to generate a full example form by description — useful when no similar forms exist in the configuration
-  - use **'get_instructions'** to get step-by-step instructions for adding a form to the configuration
-  - use **'form_example_search'** for additional examples of form attributes and commands
-  - use **'get_form_prompt'** if the above tools are not enough
+1. Вызвать `get_form_prompt` у `1c-forms-mcp`: `format='edt'` для EDT-проекта или `format='logform'`
+   для формата Конфигуратора.
+2. Найти похожие примеры через `search_form_examples`; при необходимости получить пример через `get_form_example`.
+3. Если форма создаётся по объекту метаданных и доступен EDT workflow: `edt_status` -> `get_object_metadata` ->
+   `generate_form_from_metadata`.
+4. Для типовой формы использовать `generate_form_template`; для произвольной спецификации — `generate_form`.
+5. Проверить результат через `validate_form` или `validate_form_edt`.
+6. Для фактической сборки/размещения формы использовать `.cursor/skills/1c-metadata-manage/SKILL.md` (form-manage), если MCP не делает это сам.
+
+## Изменение существующей формы
+
+1. Получить сведения о форме через `get_form_info` или текущий `Form.xml` из проекта.
+2. Если правится модуль формы — прочитать `@rules/form_module_rules.mdc`.
+3. Если добавляется новый обработчик — прочитать `@rules/forms_events_add.mdc` и привязать событие в `Form.xml`.
+4. Если меняется визуальная структура — прочитать `@rules/dev-standards-forms.mdc`.
+5. После изменения проверить XML через `validate_form` / `validate_form_edt`.

@@ -7,7 +7,7 @@ Comprehensive subsystem management: create from JSON, edit content/properties, a
 ## 1. Compile — Create Subsystem from JSON
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-compile.ps1 -Value '<json>' -OutputDir '<ConfigDir>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-compile.ps1 -Value '<json>' -OutputDir '<ConfigDir>'
 ```
 
 | Parameter | Description |
@@ -44,7 +44,7 @@ Minimal: only `name` required. Everything else has defaults.
 ## 2. Edit — Modify Existing Subsystem
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-edit.ps1 -SubsystemPath '<path>' -Operation <op> -Value '<value>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-edit.ps1 -SubsystemPath '<path>' -Operation <op> -Value '<value>'
 ```
 
 | Parameter | Description |
@@ -70,7 +70,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-subsystem-man
 ## 3. Info — Analyze Subsystem Structure
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-info.ps1 -SubsystemPath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-info.ps1 -SubsystemPath "<path>"
 ```
 
 | Parameter | Description |
@@ -94,7 +94,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-subsystem-man
 ## 4. Validate — Check Subsystem Correctness
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-validate.ps1 -SubsystemPath '<path>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-subsystem-manage/scripts/subsystem-validate.ps1 -SubsystemPath '<path>'
 ```
 
 ### Checks (13)

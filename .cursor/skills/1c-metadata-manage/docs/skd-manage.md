@@ -17,10 +17,10 @@ Takes a JSON definition of a Data Composition Schema and generates Template.xml 
 
 ```powershell
 # From file
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-skd-compile/scripts/skd-compile.ps1 -DefinitionFile "<json>" -OutputPath "<Template.xml>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-skd-compile/scripts/skd-compile.ps1 -DefinitionFile "<json>" -OutputPath "<Template.xml>"
 
 # From string (no intermediate file)
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-skd-compile/scripts/skd-compile.ps1 -Value '<json-string>' -OutputPath "<Template.xml>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-skd-compile/scripts/skd-compile.ps1 -Value '<json-string>' -OutputPath "<Template.xml>"
 ```
 
 ### JSON DSL — Quick Reference
@@ -180,7 +180,7 @@ Atomic modification operations on an existing Data Composition Schema: add, remo
 | `NoSelection` | (opt.) Don't add field to variant selection |
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-skd-edit/scripts/skd-edit.ps1 -TemplatePath "<path>" -Operation <op> -Value "<value>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-skd-edit/scripts/skd-edit.ps1 -TemplatePath "<path>" -Operation <op> -Value "<value>"
 ```
 
 ### Batch Mode
@@ -296,7 +296,7 @@ Reads a Template.xml Data Composition Schema (DCS) and outputs a compact summary
 | `OutFile` | Write result to file (UTF-8 BOM) |
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-skd-info/scripts/skd-info.ps1 -TemplatePath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-skd-info/scripts/skd-info.ps1 -TemplatePath "<path>"
 ```
 
 With mode specified:
@@ -325,7 +325,7 @@ With mode specified:
 
 Pattern: without `-Name` — map/index, with `-Name` — detail of a specific element. `full` mode combines 6 key modes in one call.
 
-Detailed output examples for each mode are in `skills/1c-metadata-manage/tools/1c-skd-info/modes-reference.md`.
+Detailed output examples for each mode are in `.cursor/skills/1c-metadata-manage/tools/1c-skd-info/modes-reference.md`.
 
 ---
 ## 4. Validate — Check Correctness
@@ -341,7 +341,7 @@ Checks structural correctness of a Template.xml Data Composition Schema. Detects
 | `OutFile` | Write result to file |
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-skd-validate/scripts/skd-validate.ps1 -TemplatePath "<path>"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-skd-validate/scripts/skd-validate.ps1 -TemplatePath "<path>"
 ```
 
 ### Checks (~30)

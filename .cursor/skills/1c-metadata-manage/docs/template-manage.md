@@ -19,7 +19,7 @@ Creates or removes a template (layout) of specified type and registers/unregiste
 ### Command (EPF)
 
 ```powershell
-pwsh -NoProfile -File skills/1c-metadata-manage/tools/1c-template-manage/scripts/add-template.ps1 -ProcessorName "<ObjectName>" -TemplateName "<TemplateName>" -TemplateType "<TemplateType>" [-Synonym "<Synonym>"] [-SrcDir "<SrcDir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-template-manage/scripts/add-template.ps1 -ProcessorName "<ObjectName>" -TemplateName "<TemplateName>" -TemplateType "<TemplateType>" [-Synonym "<Synonym>"] [-SrcDir "<SrcDir>"]
 ```
 
 ### Type Mapping
@@ -75,7 +75,7 @@ If user provides a name without prefix but context is a print form, **add the `P
 ### Command (EPF)
 
 ```powershell
-pwsh -NoProfile -File skills/1c-metadata-manage/tools/1c-template-manage/scripts/remove-template.ps1 -ProcessorName "<ObjectName>" -TemplateName "<TemplateName>" [-SrcDir "<SrcDir>"]
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-template-manage/scripts/remove-template.ps1 -ProcessorName "<ObjectName>" -TemplateName "<TemplateName>" [-SrcDir "<SrcDir>"]
 ```
 
 ### What Gets Removed

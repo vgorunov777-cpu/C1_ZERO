@@ -7,7 +7,7 @@ Comprehensive extension (CFE) management: create scaffold, borrow objects from c
 ## 1. Init — Create Extension Scaffold
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-init.ps1 -Name "МоёРасширение"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-init.ps1 -Name "МоёРасширение"
 ```
 
 | Parameter | Description | Default |
@@ -40,7 +40,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/sc
 ## 2. Borrow — Borrow Objects from Configuration
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-borrow.ps1 -ExtensionPath src -ConfigPath <config> -Object "Catalog.Контрагенты"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-borrow.ps1 -ExtensionPath src -ConfigPath <config> -Object "Catalog.Контрагенты"
 ```
 
 | Parameter | Description |
@@ -58,7 +58,7 @@ Creates XML files with `ObjectBelonging=Adopted` and `ExtendedConfigurationObjec
 ## 3. Diff — Analyze Extension Changes
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-diff.ps1 -ExtensionPath src -ConfigPath <config> -Mode A
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-diff.ps1 -ExtensionPath src -ConfigPath <config> -Mode A
 ```
 
 | Parameter | Description | Default |
@@ -76,7 +76,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/sc
 ## 4. Patch — Generate Method Interceptor
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-patch-method.ps1 -ExtensionPath src -ModulePath "Catalog.Контрагенты.ObjectModule" -MethodName "ПриЗаписи" -InterceptorType Before
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-patch-method.ps1 -ExtensionPath src -ModulePath "Catalog.Контрагенты.ObjectModule" -MethodName "ПриЗаписи" -InterceptorType Before
 ```
 
 | Parameter | Description | Default |
@@ -112,7 +112,7 @@ powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/sc
 ## 5. Validate — Check Extension Correctness
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-validate.ps1 -ExtensionPath src
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-cfe-manage/scripts/cfe-validate.ps1 -ExtensionPath src
 ```
 
 ### Checks (9 steps)

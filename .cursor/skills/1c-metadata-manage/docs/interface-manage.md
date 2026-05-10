@@ -6,10 +6,10 @@ Edit and validate CommandInterface.xml files for 1C subsystems.
 
 ## 1. Edit — Modify CommandInterface.xml
 
-Operations: hide, show, place, order, subsystem-order, group-order. Full reference: [reference.md](skills/1c-metadata-manage/tools/1c-interface-manage/reference.md).
+Operations: hide, show, place, order, subsystem-order, group-order. Full reference: [reference.md](.cursor/skills/1c-metadata-manage/tools/1c-interface-manage/reference.md).
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-interface-manage/scripts/interface-edit.ps1 -CIPath '<path>' -Operation <op> -Value '<value>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-interface-manage/scripts/interface-edit.ps1 -CIPath '<path>' -Operation <op> -Value '<value>'
 ```
 
 | Parameter | Description |
@@ -55,7 +55,7 @@ Auto-validation runs after each operation. Suppress with `-NoValidate`.
 ## 2. Validate — Check CommandInterface.xml Correctness
 
 ```powershell
-powershell.exe -NoProfile -File skills/1c-metadata-manage/tools/1c-interface-manage/scripts/interface-validate.ps1 -CIPath '<path>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .cursor/skills/1c-metadata-manage/tools/1c-interface-manage/scripts/interface-validate.ps1 -CIPath '<path>'
 ```
 
 | Parameter | Required | Default | Description |

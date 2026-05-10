@@ -8,6 +8,9 @@ alwaysApply: false
 This rule provides integration guidance for optional SDD frameworks and task management tools. **Use these tools only when they are present in the project.**
 
 > **Note**: This rule is loaded on-demand via `@rules/sdd-integrations.mdc` reference in agents. Check for framework presence before using.
+> Upstream `comol/cursor_rules_1c` also provides Cursor OpenSpec skills (`openspec-apply-change`,
+> `openspec-archive-change`, `openspec-explore`, `openspec-propose`). They are not installed by default in this repo;
+> add them only when OpenSpec is actually adopted in this project.
 
 ## Detection
 

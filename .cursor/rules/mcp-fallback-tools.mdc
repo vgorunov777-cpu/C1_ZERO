@@ -1,73 +1,69 @@
 ---
-description: "Fallback — справочник MCP-инструментов. Загружать ТОЛЬКО если MCP-инструменты недоступны (вызов возвращает ошибку). Если MCP доступны — НЕ загружать."
+description: "Fallback — справочник локальных навыков (skills). Загружать ТОЛЬКО если профильные MCP-серверы недоступны (вызов возвращает ошибку). Если MCP работают — этот файл не нужен."
 alwaysApply: false
 ---
-# MCP Tools Fallback Reference
+# MCP Fallback & Local Skills Reference
 
-> **Загружать только если MCP-инструменты недоступны.** Если вызов MCP проходит успешно — этот файл не нужен, все описания доступны через tool descriptors.
+> **Внимание:** Этот файл описывает локальные скрипты (навыки из `.cursor/skills/`) и стандартные инструменты Cursor, которые следует использовать **только если профильные MCP-серверы недоступны**.
 
-## Tool Priority: graph → code-metadata → Grep
+Если MCP работают, используйте их (они быстрее и точнее). Если MCP упали — используйте таблицу ниже.
 
-1. **graph-metadata** (1c-graph-metadata-mcp) — предпочтительно. Рекурсивные обходы, семантика, паспорта объектов
-2. **code-metadata** (1c-code-metadata-mcp) — фоллбэк. Прямой текстовый поиск
-3. **Grep/rg** — абсолютный последний Resort
+## 1. Метаданные (Metadata)
 
-## Documentation Search
+| MCP Инструмент (недоступен) | Локальный Fallback (навык / инструмент) | Описание |
+|-----------------------------|-----------------------------------------|----------|
+| `get_object_structure` / `smart_find` | `Glob` / `rg` / `Read` | Ручной поиск XML/BSL по репозиторию |
+| `find_symbol` / `find_references` | `rg` / `Read` | Ручной поиск объявления и ссылок |
+| `search_code` | `rg` / `Read` | Поиск по `*.bsl` без MCP |
 
-| Tool | Purpose | When |
-|------|---------|------|
-| **docinfo** | Точный поиск по имени (`"ТаблицаЗначений"`, `"Массив.Найти"`) | Знаешь точное имя |
-| **docsearch** | Поиск по описанию (векторный + BM25) | Не знаешь точное имя |
+## 2. Управляемые формы (Forms)
 
-## Code Templates & SSL
+| MCP Инструмент (недоступен) | Локальный Fallback (навык / инструмент) | Описание |
+|-----------------------------|-----------------------------------------|----------|
+| `search_form_examples` / `get_form_example` | `Glob` / `rg` | Поиск похожих `Form.xml` в проекте |
+| `get_form_info` | **`/form-info`** или `Read` | Анализ структуры формы из XML |
+| `validate_form` / `validate_form_edt` | **`/form-validate`** | Валидация XML-файла формы |
 
-| Tool | Purpose | When |
-|------|---------|------|
-| **templatesearch** | Поиск шаблонов кода (2000+ шаблонов) | Перед написанием кода |
-| **ssl_search** | Поиск функций БСП (SSL) | Использовать БСП где уместно |
+## 3. Поиск кода и навигация (Code Search)
 
-## Metadata Search
+| MCP Инструмент (недоступен) | Локальный Fallback (навык / инструмент) | Описание |
+|-----------------------------|-----------------------------------------|----------|
+| `search_code` | `rg` | Поиск по `*.bsl` файлам |
+| `get_module_functions` | `rg` / `Read` | Чтение BSL файла напрямую |
+| `find_references` / `impact_analysis` | `rg` | Ручной поиск ссылок и оценка влияния |
 
-| Tool | Purpose | When |
-|------|---------|------|
-| **metadatasearch** | Семантический/FTS поиск по XML метаданных | Поиск объектов, проверка существования |
-| **get_metadata_details** | Полная структура: реквизиты, ТЧ, синонимы, типы | Знаешь имя объекта |
-| **search_metadata** | Cypher/JSON запросы к Neo4j | Графовые запросы (предпочтительно) |
-| **get_object_dossier** | Полный паспорт: структура+формы+deps+code+roles | Первый шаг при анализе объекта |
+## 4. Документация и синтаксис (Docs & Syntax)
 
-## Code Search & Navigation
+| MCP Инструмент (недоступен) | Локальный Fallback (навык / инструмент) | Описание |
+|-----------------------------|-----------------------------------------|----------|
+| `search` / `getMember` / `docsearch` | `WebSearch` | Поиск в интернете (Синтакс-помощник) |
+| `syntaxcheck` | **`/epf-validate`** / **`/cf-validate`** | Валидация структуры XML/BSL |
+| `check_1c_code` | LLM Review | Внутреннее ревью кода агентом |
 
-| Graph (preferred) | Code-metadata (fallback) | Purpose |
-|-------------------|--------------------------|---------|
-| **search_code** (semantic+fulltext+hybrid, L0–L3) | **codesearch** | Поиск кода |
-| **trace_call_chain** (recursive depth 1–10) | **get_method_call_hierarchy** | Цепочки вызовов |
-| **trace_impact** (recursive USED_IN+CALLS) | **graph_dependencies** | Impact-анализ |
-| **find_objects_using_object** / **find_usages_of_object** | **graph_dependencies** (reverse) | Где используется объект |
-| — | **search_function** | Найти процедуру/функцию по имени |
-| — | **get_module_structure** | Структура модуля перед редактированием |
-| — | **bsl_scope_members** | Доступные методы/свойства контекста |
+## 5. Шаблоны и БСП (Templates & SSL)
 
-## 1CCodeChecker (1С:Напарник)
+| MCP Инструмент (недоступен) | Локальный Fallback (навык / инструмент) | Описание |
+|-----------------------------|-----------------------------------------|----------|
+| `templatesearch` / `get_template` | `rg` / `Read` | Поиск в `.cursor/user/templates/` |
+| поиск БСП | `rg` / `Read` | Поиск в общих модулях БСП, если они выгружены |
 
-| Tool | Purpose |
-|------|---------|
-| **check_1c_code** | Техническая проверка: синтаксис, логика, производительность |
-| **review_1c_code** | Ревью: стиль, стандарты ITS, именование |
-| **rewrite_1c_code** | AI-переписывание (goal: `optimize`, `readability`, `error handling`) |
-| **modify_1c_code** | Целевая модификация кода |
-| **ask_1c_ai** | Вопросы 1С:Напарнику |
-| **search_1c_documentation** | Документация платформы по версии |
-| **onec_help** | Быстрый поиск в документации |
-| **its_help** → **fetch_its** | Стандарты ITS (всегда читать полный текст по ID) |
-| **diff_1c_documentation_versions** | Сравнение версий документации |
-| **config_help** | Документация по конфигурациям (ERP, БП, ЗУП, УТ) |
-| **syntaxcheck** | BSL Language Server (макс. 3 раза за цикл) |
+---
 
-## Forms
+## 6. Локальный агрегированный skill
 
-| Tool | Purpose |
-|------|---------|
-| **search_forms** | Поиск форм в конфигурации |
-| **inspect_form_layout** | Полная структура формы: элементы, привязки, команды, события |
-| **get_xsd_schema** | XSD-схема для типа метаданных |
-| **verify_xml** | Валидация XML по XSD |
+Основной fallback для metadata/EPF/ERF/SKD/MXL/roles/web/live DB задач:
+`.cursor/skills/1c-metadata-manage/SKILL.md`.
+
+Он маршрутизирует домены через документы:
+
+- `docs/meta-manage.md` — объекты метаданных, реквизиты, табличные части, модули.
+- `docs/form-manage.md` — управляемые формы.
+- `docs/epf-manage.md` — внешние обработки и отчёты.
+- `docs/db-manage.md` — базы, запуск, загрузка/выгрузка.
+- `docs/skd-manage.md`, `docs/mxl-manage.md` — СКД и MXL.
+- `docs/role-manage.md`, `docs/subsystem-manage.md`, `docs/interface-manage.md` — роли, подсистемы, командный интерфейс.
+- `docs/cf-manage.md`, `docs/cfe-manage.md` — CF/CFE.
+- `docs/template-manage.md`, `docs/help-manage.md`, `docs/ssl-patterns.md`, `docs/data-tools.md` — шаблоны, справка, БСП, live DB tools.
+
+PowerShell-скрипты лежат в `.cursor/skills/1c-metadata-manage/tools/**/scripts/*.ps1`.
+Запускать их только через `powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...`.
