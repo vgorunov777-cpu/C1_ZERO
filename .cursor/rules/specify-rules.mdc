@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+---
+
+<!-- SPECKIT START -->
+Корень **Spec Kit** и артефакты (`specs/`, `.specify/`, constitution, скрипты) — каталог **`Projects/`** относительно корня репозитория. При вызове PowerShell-скриптов из `.specify/scripts/` задавайте рабочую папку **`Projects`** (или глубже — подпапка конкретного проекта), чтобы `Find-SpecifyRoot` находил `Projects/.specify`.
+
+Навыки `/speckit-*` в интерфейсе Cursor указывают на те же файлы, что лежат в `Projects/.cursor/skills/` (junction в корневом `.cursor/skills/`).
+
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->
